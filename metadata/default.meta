@@ -1,0 +1,99 @@
+
+# Application-level permissions
+
+[]
+access = read : [ * ], write : [ admin, power ]
+
+### EVENT TYPES
+
+[eventtypes]
+export = system
+
+
+### PROPS
+
+[props]
+export = system
+
+
+### TRANSFORMS
+
+[transforms]
+export = system
+
+
+### LOOKUPS
+
+[lookups]
+export = system
+
+
+### VIEWSTATES: even normal users should be able to create shared viewstates
+
+[viewstates]
+access = read : [ * ], write : [ * ]
+export = system
+
+
+[lookups/corona_virus_cases.csv]
+owner = roconnor@splunk.com
+version = 8.0.1
+modtime = 1580177747.165863000
+
+[views/corona_virus]
+version = 8.0.1
+modtime = 1583174767.081381000
+
+[lookups/historical_confirmed.csv]
+owner = roconnor@splunk.com
+version = 8.0.1
+modtime = 1581346437.669809000
+
+[nav/default]
+version = 8.0.1
+modtime = 1583386716.488229000
+
+[lookups/splunk_office_locations.csv]
+owner = roconnor@splunk.com
+version = 8.0.1
+modtime = 1583387447.161102000
+
+[views/global_security]
+access = read : [ admin, protective-intelligence ], write : [ admin, protective-intelligence ]
+export = none
+owner = roconnor@splunk.com
+version = 8.0.1
+modtime = 1583443806.128809000
+
+[views/corona_virus_clone]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = roconnor@splunk.com
+version = 8.0.1
+modtime = 1583518912.382322000
+
+[views/coronavirus__ryan_private]
+access = read : [ * ]
+export = none
+owner = roconnor@splunk.com
+version = 8.0.1
+modtime = 1583636688.745968000
+
+[lookups/timer.csv]
+access = read : [ * ], write : [ * ]
+export = system
+owner = nobody
+version = 8.0.1
+modtime = 1583531113.598795000
+
+[collections/user_timer]
+access = read : [ * ], write : [ * ]
+export = system
+
+[transforms/user_timer]
+access = read : [ * ], write : [ * ]
+export = system
+owner = roconnor@splunk.com
+version = 8.0.1
+modtime = 1583532943.664801000
+

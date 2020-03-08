@@ -1,0 +1,290 @@
+<dashboard theme="dark" stylesheet="dashboard.css">
+  <label>Coronavirus</label>
+  <description>This data is sourced from https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6</description>
+  <row>
+    <panel>
+      <title>Latest Update</title>
+      <single>
+        <search>
+          <query>| inputlookup confirmed.csv 
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 - _time 
+| head 1
+| fields + _time
+| eval date = _time
+| eval date=strftime(date,"%m/%d/%y")
+| fields date</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Confirmed Cases</title>
+      <single>
+        <search>
+          <query>| inputlookup confirmed.csv 
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 - _time 
+| head 1
+| fields - _time
+| transpose
+| rename column as "Country", "row 1" as "Total" 
+| sort 0 - Total
+| stats sum(Total) as Total</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Deaths</title>
+      <single>
+        <search>
+          <query>| inputlookup deaths.csv 
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 - _time 
+| head 1
+| fields - _time
+| transpose
+| rename column as "Country", "row 1" as "Total" 
+| sort 0 - Total
+| stats sum(Total) as Total</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Recovered</title>
+      <single>
+        <search>
+          <query>| inputlookup recovered.csv 
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 - _time 
+| head 1
+| fields - _time
+| transpose
+| rename column as "Country", "row 1" as "Total" 
+| sort 0 - Total
+| stats sum(Total) as Total</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Corona Virus Cases</title>
+      <map>
+        <search>
+          <query>| inputlookup confirmed.csv 
+| fields - "Province/State" 
+| rename "Country/Region" as Country 
+| eval Country=Country+","+Lat+","+Long 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 - _time 
+| head 1 
+| fields - _time 
+| transpose 
+| rename column as "Country", "row 1" as "Confirmed" 
+| sort 0 - Total 
+| eval fields=split(Country,",") 
+| eval Lat=mvindex(fields,1) 
+| eval Long=mvindex(fields,2) 
+| eval Country=mvindex(fields,0) 
+| fields - fields 
+| sort 0 + Country Lat Long 
+| appendcols 
+    [| inputlookup deaths.csv 
+    | fields - "Province/State" 
+    | rename "Country/Region" as Country 
+    | eval Country=Country+","+Lat+","+Long 
+    | stats sum(*) as * by Country 
+    | dedup Country 
+    | transpose 0 column_name=_time header_field=Country 
+    | eval _time=strptime(_time,"%m/%d/%y") 
+    | sort 0 - _time 
+    | head 1 
+    | fields - _time 
+    | transpose 
+    | rename column as "Country", "row 1" as "Deaths" 
+    | sort 0 - Deaths 
+    | eval fields=split(Country,",") 
+    | eval Lat=mvindex(fields,1) 
+    | eval Long=mvindex(fields,2) 
+    | eval Country=mvindex(fields,0) 
+    | fields - fields 
+    | sort 0 + Country Lat Long] 
+| appendcols 
+    [| inputlookup recovered.csv 
+    | fields - "Province/State" 
+    | rename "Country/Region" as Country 
+    | eval Country=Country+","+Lat+","+Long 
+    | stats sum(*) as * by Country 
+    | dedup Country 
+    | transpose 0 column_name=_time header_field=Country 
+    | eval _time=strptime(_time,"%m/%d/%y") 
+    | sort 0 - _time 
+    | head 1 
+    | fields - _time 
+    | transpose 
+    | rename column as "Country", "row 1" as "Recovered" 
+    | sort 0 - Recovered 
+    | eval fields=split(Country,",") 
+    | eval Lat=mvindex(fields,1) 
+    | eval Long=mvindex(fields,2) 
+    | eval Country=mvindex(fields,0) 
+    | fields - fields 
+    | sort 0 + Country Lat Long]
+    | geostats latfield=Lat longfield=Long  sum(Confirmed) sum(Recovered) sum(Deaths)  by Country globallimit=0
+| rename "sum(*" as *
+| rename *)* as **</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="mapping.choroplethLayer.colorBins">5</option>
+        <option name="mapping.choroplethLayer.colorMode">auto</option>
+        <option name="mapping.choroplethLayer.maximumColor">0xaf575a</option>
+        <option name="mapping.choroplethLayer.minimumColor">0x62b3b2</option>
+        <option name="mapping.choroplethLayer.neutralPoint">0</option>
+        <option name="mapping.choroplethLayer.shapeOpacity">0.75</option>
+        <option name="mapping.choroplethLayer.showBorder">1</option>
+        <option name="mapping.data.maxClusters">100</option>
+        <option name="mapping.legend.placement">bottomright</option>
+        <option name="mapping.map.center">(0,0)</option>
+        <option name="mapping.map.panning">1</option>
+        <option name="mapping.map.scrollZoom">0</option>
+        <option name="mapping.map.zoom">2</option>
+        <option name="mapping.markerLayer.markerMaxSize">50</option>
+        <option name="mapping.markerLayer.markerMinSize">10</option>
+        <option name="mapping.markerLayer.markerOpacity">0.8</option>
+        <option name="mapping.showTiles">1</option>
+        <option name="mapping.tileLayer.maxZoom">7</option>
+        <option name="mapping.tileLayer.minZoom">0</option>
+        <option name="mapping.tileLayer.tileOpacity">1</option>
+        <option name="mapping.type">marker</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Total Cases by Country</title>
+      <table>
+        <search>
+          <query>| inputlookup confirmed.csv 
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 - _time 
+| head 1
+| fields - _time
+| transpose
+| rename column as "Country", "row 1" as "Total" 
+| sort 0 - Total</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Confirmed Cases Over Time (By Country)</title>
+      <chart>
+        <search>
+          <query>| inputlookup confirmed.csv 
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country | stats sum(*) as * by Country
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Total Confirmed Cases (With Average Trend Line)</title>
+      <chart>
+        <search>
+          <query>| inputlookup confirmed.csv 
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 - _time 
+| addtotals 
+| fields _time Total 
+| eval num=1 
+| streamstats sum(num) as num 
+| eventstats max(Total) as max min(Total) as min max(num) as max_points 
+| eval trend=max/max_points
+| fields - min max max_points num
+| sort 0 + Total 
+| streamstats sum(trend) as "Average Cases"
+ |fields - trend
+ | rename "Total" as "Total Cases"</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.overlayFields">"Average Cases"</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+</dashboard>

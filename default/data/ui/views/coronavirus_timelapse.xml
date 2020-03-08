@@ -1,0 +1,505 @@
+<dashboard theme="dark" stylesheet="dashboard.css">
+  <label>Coronavirus - Timelapse</label>
+  <description>This data is sourced from https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6. It will continuously loop through to paint a picture of the outbreak from the first day of records, up until today.</description>
+  <search id="base">
+    <query>|inputlookup confirmed.csv | fields *</query>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+    <refresh>1s</refresh>
+    <refreshType>delay</refreshType>
+  </search>
+  <row>
+    <panel>
+      <title>Day Since January 1, 2020</title>
+      <single>
+        <search>
+          <query>| inputlookup user_timer 
+| append 
+    [| rest /services/authentication/current-context 
+    | table username 
+    | rename username as username2 ] 
+| sort 0 - username2
+| filldown username2
+| eval username=case(isnull(username), username2, 1=1, username)
+| where username=username2
+| eval inc=case(isnull(inc), 0, 1=1, inc+1 ) 
+| eval now=now() 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| eval time=_time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor(((now+86400)-time2)/86400) 
+| fields - now starttime time2 
+| eval inc=case(inc&gt;=days, 1, inc&lt;21, 21, 1=1, inc) 
+| fields - days 
+| eval _key=username
+| stats max(inc) as inc by username username2 _key
+| fields _key inc username
+| outputlookup user_timer key_field=_key</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+          <refresh>1s</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Latest Update</title>
+      <single>
+        <search base="base">
+          <query>| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| eval time=_time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor((_time-time2)/86400)
+| appendcols [ | rest splunk_server=local /services/authentication/current-context | table username]
+| filldown username
+| search [|inputlookup user_timer | rename inc as days | table days username] | fields _time
+ | eval time=_time
+| eval time2=strftime(time,"%m/%d/%y")
+| fields time2</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Number of Countries with Confirmed Cases</title>
+        <search base="base">
+          <query>| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| eval time=_time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor((_time-time2)/86400) 
+| appendcols 
+    [| rest splunk_server=local /services/authentication/current-context 
+    | table username] 
+| filldown username 
+| search 
+    [| inputlookup user_timer 
+    | rename inc as days 
+    | table days username] 
+| fields - _time username time2 starttime days time
+| transpose 
+| rename column as "Country", "row 1" as "Total" 
+| sort 0 - Total
+| search Total&gt;0
+|  stats dc(Country)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Average Rate of Infection (Per Day)</title>
+        <search base="base">
+          <query>| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 + _time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor((_time-time2)/86400) 
+| fields days * 
+| appendcols 
+    [| rest /services/authentication/current-context 
+    | table username 
+    | rename username as "current_username"] 
+| filldown current_username 
+| rename current_username as username 
+| lookup user_timer username 
+| where days&lt;inc 
+| fields - days starttime time2 *username* 
+| fields _time * 
+| addtotals 
+| fields _time Total 
+| eval num=1 
+| streamstats sum(num) as num 
+| eventstats max(Total) as max min(Total) as min max(num) as max_points 
+| eval trend=max/max_points 
+| table trend 
+| head 1</query>
+          <refresh>1s</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Confirmed Cases</title>
+      <single>
+        <search base="base">
+          <query>| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| eval time=_time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor((_time-time2)/86400)
+| appendcols [ | rest splunk_server=local  /services/authentication/current-context | table username]
+| filldown username
+| search [|inputlookup user_timer | rename inc as days | table days username]
+| fields - days time starttime time2
+| sort 0 - _time 
+| addtotals 
+| fields _time Total 
+| eval num=1 
+| streamstats sum(num) as num 
+| eventstats max(Total) as max min(Total) as min max(num) as max_points 
+| eval trend=max/max_points
+| fields - min max max_points num
+| sort 0 + Total 
+| streamstats sum(trend) as "Average Cases"
+ |fields - trend
+ | rename "Total" as "Total Cases"</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0x0877a6","0xf8be34","0xf1813f","0xdc4e41"]</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Deaths</title>
+      <single>
+        <search>
+          <query>| inputlookup deaths.csv 
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| eval time=_time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor((_time-time2)/86400)
+| appendcols [ | rest splunk_server=local  /services/authentication/current-context | table username]
+| filldown username
+| search [|inputlookup user_timer | rename inc as days | table days username]| fields - days time starttime time2
+| sort 0 - _time 
+| addtotals 
+| fields _time Total 
+| eval num=1 
+| streamstats sum(num) as num 
+| eventstats max(Total) as max min(Total) as min max(num) as max_points 
+| eval trend=max/max_points
+| fields - min max max_points num
+| sort 0 + Total 
+| streamstats sum(trend) as "Average Cases"
+ |fields - trend
+ | rename "Total" as "Total Cases"</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>1s</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0x0877a6","0xf8be34","0xf1813f","0xdc4e41"]</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Recovered</title>
+      <single>
+        <search>
+          <query>| inputlookup recovered.csv 
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| eval time=_time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor((_time-time2)/86400)
+| appendcols [ | rest splunk_server=local  /services/authentication/current-context | table username]
+| filldown username
+| search [|inputlookup user_timer | rename inc as days | table days username]| fields - days time starttime time2
+| sort 0 - _time 
+| addtotals 
+| fields _time Total 
+| eval num=1 
+| streamstats sum(num) as num 
+| eventstats max(Total) as max min(Total) as min max(num) as max_points 
+| eval trend=max/max_points
+| fields - min max max_points num
+| sort 0 + Total 
+| streamstats sum(trend) as "Average Cases"
+ |fields - trend
+ | rename "Total" as "Total Cases"</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>1s</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Corona Virus Cases</title>
+      <map>
+        <search base="base">
+          <query>
+| fields - "Province/State" 
+| rename "Country/Region" as Country 
+| eval Country=Country+","+Lat+","+Long 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 - _time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor((_time-time2)/86400) 
+| appendcols [ | rest splunk_server=local  /services/authentication/current-context | table username]
+| filldown username
+| search [|inputlookup user_timer | rename inc as days | table days username]
+| fields - days time starttime time2 
+| fields - _time 
+| transpose 
+| rename column as "Country", "row 1" as "Confirmed" 
+| sort 0 - Total 
+| eval fields=split(Country,",") 
+| eval Lat=mvindex(fields,1) 
+| eval Long=mvindex(fields,2) 
+| eval Country=mvindex(fields,0) 
+| fields - fields 
+| sort 0 + Country Lat Long 
+| appendcols 
+    [| inputlookup deaths.csv 
+    | fields - "Province/State" 
+    | rename "Country/Region" as Country 
+    | eval Country=Country+","+Lat+","+Long 
+    | stats sum(*) as * by Country 
+    | dedup Country 
+    | transpose 0 column_name=_time header_field=Country 
+    | eval _time=strptime(_time,"%m/%d/%y") 
+    | sort 0 - _time 
+    | eval starttime="01012020" 
+    | eval time2=strptime(starttime,"%m%d%Y") 
+    | eval days=floor((_time-time2)/86400) 
+| appendcols [ | rest /services/authentication/current-context | table username]
+| filldown username
+| search [|inputlookup user_timer | rename inc as days | table days username]
+    | fields - days time starttime time2 
+    | fields - _time 
+    | transpose 
+    | rename column as "Country", "row 1" as "Deaths" 
+    | sort 0 - Deaths 
+    | eval fields=split(Country,",") 
+    | eval Lat=mvindex(fields,1) 
+    | eval Long=mvindex(fields,2) 
+    | eval Country=mvindex(fields,0) 
+    | fields - fields 
+    | sort 0 + Country Lat Long] 
+| appendcols 
+    [| inputlookup recovered.csv 
+    | fields - "Province/State" 
+    | rename "Country/Region" as Country 
+    | eval Country=Country+","+Lat+","+Long 
+    | stats sum(*) as * by Country 
+    | dedup Country 
+    | transpose 0 column_name=_time header_field=Country 
+    | eval _time=strptime(_time,"%m/%d/%y") 
+    | sort 0 - _time 
+    | eval starttime="01012020" 
+    | eval time2=strptime(starttime,"%m%d%Y") 
+    | eval days=floor((_time-time2)/86400) 
+| appendcols [ | rest /services/authentication/current-context | table username]
+| filldown username
+| search [|inputlookup user_timer | rename inc as days | table days username]
+    | fields - days time starttime time2 
+    | fields - _time 
+    | transpose 
+    | rename column as "Country", "row 1" as "Recovered" 
+    | sort 0 - Recovered 
+    | eval fields=split(Country,",") 
+    | eval Lat=mvindex(fields,1) 
+    | eval Long=mvindex(fields,2) 
+    | eval Country=mvindex(fields,0) 
+    | fields - fields 
+    | sort 0 + Country Lat Long] 
+| geostats latfield=Lat longfield=Long sum(Confirmed) sum(Recovered) sum(Deaths) by Country globallimit=0 
+| rename "sum(*" as * 
+| rename *)* as **</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="mapping.choroplethLayer.colorBins">5</option>
+        <option name="mapping.choroplethLayer.colorMode">auto</option>
+        <option name="mapping.choroplethLayer.maximumColor">0xaf575a</option>
+        <option name="mapping.choroplethLayer.minimumColor">0x62b3b2</option>
+        <option name="mapping.choroplethLayer.neutralPoint">0</option>
+        <option name="mapping.choroplethLayer.shapeOpacity">0.75</option>
+        <option name="mapping.choroplethLayer.showBorder">1</option>
+        <option name="mapping.data.maxClusters">100</option>
+        <option name="mapping.legend.placement">bottomright</option>
+        <option name="mapping.map.center">(0,0)</option>
+        <option name="mapping.map.panning">1</option>
+        <option name="mapping.map.scrollZoom">0</option>
+        <option name="mapping.map.zoom">2</option>
+        <option name="mapping.markerLayer.markerMaxSize">50</option>
+        <option name="mapping.markerLayer.markerMinSize">10</option>
+        <option name="mapping.markerLayer.markerOpacity">0.8</option>
+        <option name="mapping.showTiles">1</option>
+        <option name="mapping.tileLayer.maxZoom">7</option>
+        <option name="mapping.tileLayer.minZoom">0</option>
+        <option name="mapping.tileLayer.tileOpacity">1</option>
+        <option name="mapping.type">marker</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Total Cases by Country</title>
+      <table>
+        <search base="base">
+          <query>
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| eval time=_time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor((_time-time2)/86400) 
+| appendcols 
+    [| rest /services/authentication/current-context 
+    | table username] 
+| filldown username 
+| search 
+    [| inputlookup user_timer 
+    | rename inc as days 
+    | table days username] 
+| fields - _time username time2 starttime days time
+| transpose 
+| rename column as "Country", "row 1" as "Total" 
+| sort 0 - Total</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Confirmed Cases Over Time (By Country)</title>
+      <chart>
+        <search base="base">
+          <query>| fields * 
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 + _time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor((_time-time2)/86400) 
+| fields days *
+| appendcols 
+    [| rest /services/authentication/current-context 
+    | table username 
+    | rename username as "current_username"] 
+| filldown current_username 
+| rename current_username as username
+| lookup user_timer username
+| where days&lt;inc
+| fields - days starttime time2 *username* 
+| fields _time *</query>
+          <refresh>1s</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="charting.axisTitleX.text">Date</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Total Confirmed Cases (With Average Trend Line)</title>
+      <chart>
+        <search base="base">
+          <query>| fields * 
+| fields * 
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 + _time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor((_time-time2)/86400) 
+| fields days * 
+| appendcols 
+    [| rest /services/authentication/current-context 
+    | table username 
+    | rename username as "current_username"] 
+    | filldown current_username 
+| rename current_username as username
+| lookup user_timer username
+| where days&lt;inc
+| fields - days starttime time2 *username* 
+| fields _time *
+| addtotals 
+| fields _time Total 
+| eval num=1 
+| streamstats sum(num) as num 
+| eventstats max(Total) as max min(Total) as min max(num) as max_points 
+| eval trend=max/max_points 
+| fields - min max max_points 
+| sort 0 + Total 
+| streamstats sum(trend) as "Average Cases (All-Time)" 
+| fields - trend 
+| rename "Total" as "Total Cases" 
+| eval "Infection Rate"='Total Cases'/num 
+| fields - num "Average Cases (All-Time)"</query>
+          <refresh>1s</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="charting.axisTitleX.text">Date</option>
+        <option name="charting.axisTitleY.text">Total Cases</option>
+        <option name="charting.axisY2.enabled">1</option>
+        <option name="charting.axisY2.scale">linear</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.overlayFields">"Infection Rate"</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+</dashboard>

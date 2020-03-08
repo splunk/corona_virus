@@ -1,0 +1,8 @@
+<nav search_view="search">
+  <view name="corona_virus"  default='true'  />
+  <view name="search"/>
+  <view name="datasets" />
+  <view name="reports" />
+  <view name="alerts" />
+  <view name="dashboards" />
+</nav>

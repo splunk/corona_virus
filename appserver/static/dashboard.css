@@ -1,0 +1,6 @@
+div.leaflet-popup-content tr:first-child {
+display: none;
+}
+div.leaflet-popup-content tr:nth-child(2) {
+display: none;
+}
