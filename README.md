@@ -22,3 +22,7 @@ There are two dashboards here:
     1. This is a static analysis of the Coronavirus. 
 1. Coronavirus - Timelapse
     1. This is a timelapse of the Coronavirus from the first day it was detected, until the current day. 
+    
+## Lookup Table Updating
+
+There is a scripted input inside of this app that can be enabled. It can be found in the GUI by going to Settings > Data Inputs > Scripts and enabling the input "update_git.sh". 
