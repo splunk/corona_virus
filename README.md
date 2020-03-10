@@ -26,3 +26,16 @@ There are two dashboards here:
 ## Lookup Table Updating
 
 There is a scripted input inside of this app that can be enabled. It can be found in the GUI by going to Settings > Data Inputs > Scripts and enabling the input "update_git.sh". 
+
+This scripted input will send it's output by default to `index=main sourcetype=git_update_corona`. You can use this index/sourcetype to find out when the latest update to the Coronavirus git repository took place. An example update would look like this:
+
+```
+2020-03-09 20:59:32	Entering 'git/COVID-19'
+
+Updating 382bda4..473681f
+Fast-forward
+ .../time_series_19-covid-Confirmed.csv             | 541 ++++++++++-----------
+ .../time_series_19-covid-Deaths.csv                | 541 ++++++++++-----------
+ .../time_series_19-covid-Recovered.csv             | 541 ++++++++++-----------
+ 3 files changed, 801 insertions(+), 822 deletions(-)
+ ```
