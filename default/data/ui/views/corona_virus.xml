@@ -1,32 +1,54 @@
-<dashboard theme="dark" stylesheet="dashboard.css">
-  <label>Coronavirus</label>
-   <search id="base">
+<form theme="dark" stylesheet="dashboard.css">
+  <label>Coronavirus - Interactive Dashboard</label>
+  <search id="base">
     <query>|inputlookup confirmed.csv | fields *</query>
     <earliest>-24h@h</earliest>
     <latest>now</latest>
   </search>
-  <description>This data is sourced from https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6</description>
-  <row>
-    <panel>
-      <title>Latest Update</title>
-      <single>
-        <search base="base">
-          <query>
-| fields - Lat Long "Province/State" 
+  <description>This data is sourced from https://github.com/CSSEGISandData/COVID-19. Expect updates to the data about once per day.</description>
+  <fieldset submitButton="false">
+    <input type="multiselect" token="country">
+      <label>Country</label>
+      <fieldForLabel>Country</fieldForLabel>
+      <fieldForValue>Country</fieldForValue>
+      <search base="base">
+        <query> 
+| fields - "Province/State" 
 | rename "Country/Region" as Country 
+| eval Country=Country+","+Lat+","+Long 
 | stats sum(*) as * by Country 
 | dedup Country 
 | transpose 0 column_name=_time header_field=Country 
 | eval _time=strptime(_time,"%m/%d/%y") 
 | sort 0 - _time 
-| head 1
-| fields + _time
-| eval date = _time
-| eval date=strftime(date,"%m/%d/%y")
-| fields date</query>
-        </search>
+| head 1 
+| fields - _time 
+| transpose 
+| rename column as "Country", "row 1" as "Confirmed" 
+| sort 0 - Total 
+| eval fields=split(Country,",") 
+| eval Lat=mvindex(fields,1) 
+| eval Long=mvindex(fields,2) 
+| eval Country=mvindex(fields,0) | table Country | dedup Country</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>Country="</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter> OR </delimiter>
+      <choice value="*">All Countries</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Last Update</title>
+      <single>
+        <search ref="corona_virus_last_update"></search>
         <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
       </single>
     </panel>
   </row>
@@ -40,15 +62,18 @@
 | rename "Country/Region" as Country 
 | stats sum(*) as * by Country 
 | dedup Country 
+| search $country$ 
 | transpose 0 column_name=_time header_field=Country 
 | eval _time=strptime(_time,"%m/%d/%y") 
 | sort 0 - _time 
-| head 1
-| fields - _time
-| transpose
+| head 1 
+| fields - _time 
+| transpose 
 | rename column as "Country", "row 1" as "Total" 
-| sort 0 - Total
+| sort 0 - Total 
 | stats sum(Total) as Total</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
@@ -63,17 +88,18 @@
 | rename "Country/Region" as Country 
 | stats sum(*) as * by Country 
 | dedup Country 
+| search $country$ 
 | transpose 0 column_name=_time header_field=Country 
 | eval _time=strptime(_time,"%m/%d/%y") 
 | sort 0 - _time 
-| head 1
-| fields - _time
-| transpose
+| head 1 
+| fields - _time 
+| transpose 
 | rename column as "Country", "row 1" as "Total" 
-| sort 0 - Total
+| sort 0 - Total 
 | stats sum(Total) as Total</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
@@ -88,17 +114,18 @@
 | rename "Country/Region" as Country 
 | stats sum(*) as * by Country 
 | dedup Country 
+| search $country$ 
 | transpose 0 column_name=_time header_field=Country 
 | eval _time=strptime(_time,"%m/%d/%y") 
 | sort 0 - _time 
-| head 1
-| fields - _time
-| transpose
+| head 1 
+| fields - _time 
+| transpose 
 | rename column as "Country", "row 1" as "Total" 
-| sort 0 - Total
+| sort 0 - Total 
 | stats sum(Total) as Total</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
@@ -110,9 +137,9 @@
       <title>Corona Virus Cases</title>
       <map>
         <search base="base">
-          <query>
-| fields - "Province/State" 
+          <query> | fields * |  fields - "Province/State" 
 | rename "Country/Region" as Country 
+| search $country$
 | eval Country=Country+","+Lat+","+Long 
 | stats sum(*) as * by Country 
 | dedup Country 
@@ -134,6 +161,8 @@
     [| inputlookup deaths.csv 
     | fields - "Province/State" 
     | rename "Country/Region" as Country 
+    | search $country$
+
     | eval Country=Country+","+Lat+","+Long 
     | stats sum(*) as * by Country 
     | dedup Country 
@@ -155,6 +184,8 @@
     [| inputlookup recovered.csv 
     | fields - "Province/State" 
     | rename "Country/Region" as Country 
+    | search $country$
+
     | eval Country=Country+","+Lat+","+Long 
     | stats sum(*) as * by Country 
     | dedup Country 
@@ -175,6 +206,9 @@
     | geostats latfield=Lat longfield=Long  sum(Confirmed) sum(Recovered) sum(Deaths)  by Country globallimit=0
 | rename "sum(*" as *
 | rename *)* as **</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
         </search>
         <option name="drilldown">none</option>
         <option name="mapping.choroplethLayer.colorBins">5</option>
@@ -211,21 +245,83 @@
       <table>
         <search base="base">
           <query>
-| fields - Lat Long "Province/State" 
+| fields * 
+| fields - "Province/State" 
 | rename "Country/Region" as Country 
+| search $country$
+| eval Country=Country+","+Lat+","+Long 
 | stats sum(*) as * by Country 
 | dedup Country 
 | transpose 0 column_name=_time header_field=Country 
 | eval _time=strptime(_time,"%m/%d/%y") 
 | sort 0 - _time 
-| head 1
-| fields - _time
-| transpose
-| rename column as "Country", "row 1" as "Total" 
-| sort 0 - Total</query>
+| head 1 
+| fields - _time 
+| transpose 
+| rename column as "Country", "row 1" as "Confirmed" 
+| sort 0 - Total 
+| eval fields=split(Country,",") 
+| eval Lat=mvindex(fields,1) 
+| eval Long=mvindex(fields,2) 
+| eval Country=mvindex(fields,0) 
+| fields - fields 
+| sort 0 + Country Lat Long 
+| appendcols 
+    [| inputlookup deaths.csv 
+    | fields - "Province/State" 
+    | rename "Country/Region" as Country 
+| search $country$
+    | eval Country=Country+","+Lat+","+Long 
+    | stats sum(*) as * by Country 
+    | dedup Country 
+    | transpose 0 column_name=_time header_field=Country 
+    | eval _time=strptime(_time,"%m/%d/%y") 
+    | sort 0 - _time 
+    | head 1 
+    | fields - _time 
+    | transpose 
+    | rename column as "Country", "row 1" as "Deaths" 
+    | sort 0 - Deaths 
+    | eval fields=split(Country,",") 
+    | eval Lat=mvindex(fields,1) 
+    | eval Long=mvindex(fields,2) 
+    | eval Country=mvindex(fields,0) 
+    | fields - fields 
+    | sort 0 + Country Lat Long] 
+| appendcols 
+    [| inputlookup recovered.csv 
+    | fields - "Province/State" 
+    | rename "Country/Region" as Country 
+| search $country$
+    | eval Country=Country+","+Lat+","+Long 
+    | stats sum(*) as * by Country 
+    | dedup Country 
+    | transpose 0 column_name=_time header_field=Country 
+    | eval _time=strptime(_time,"%m/%d/%y") 
+    | sort 0 - _time 
+    | head 1 
+    | fields - _time 
+    | transpose 
+    | rename column as "Country", "row 1" as "Recovered" 
+    | sort 0 - Recovered 
+    | eval fields=split(Country,",") 
+    | eval Lat=mvindex(fields,1) 
+    | eval Long=mvindex(fields,2) 
+    | eval Country=mvindex(fields,0) 
+    | fields - fields 
+    | sort 0 + Country Lat Long] 
+| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered by Country</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
         </search>
+        <option name="dataOverlayMode">none</option>
         <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
         <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
       </table>
     </panel>
     <panel>
@@ -233,48 +329,50 @@
       <chart>
         <search base="base">
           <query>
-| fields - Lat Long "Province/State" 
-| rename "Country/Region" as Country | stats sum(*) as * by Country
-| dedup Country 
-| transpose 0 column_name=_time header_field=Country</query>
-        </search>
-        <option name="charting.chart">area</option>
-        <option name="charting.chart.nullValueMode">connect</option>
-        <option name="charting.drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </chart>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>Total Confirmed Cases (With Average Trend Line)</title>
-      <chart>
-        <search base="base">
-          <query>
+| fields * 
 | fields - Lat Long "Province/State" 
 | rename "Country/Region" as Country 
+| search $country$
+
 | stats sum(*) as * by Country 
 | dedup Country 
-| transpose 0 column_name=_time header_field=Country 
-| eval _time=strptime(_time,"%m/%d/%y") 
-| sort 0 - _time 
-| addtotals 
-| fields _time Total 
-| eval num=1 
-| streamstats sum(num) as num 
-| eventstats max(Total) as max min(Total) as min max(num) as max_points 
-| eval trend=max/max_points
-| fields - min max max_points num
-| sort 0 + Total 
-| streamstats sum(trend) as "Average Cases"
- |fields - trend
- | rename "Total" as "Total Cases"</query>
+| transpose 0 column_name=_time header_field=Country</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
         </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
         <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
         <option name="charting.chart">area</option>
-        <option name="charting.chart.overlayFields">"Average Cases"</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
         <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
         <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
       </chart>
     </panel>
   </row>
@@ -283,10 +381,11 @@
       <title>Confirmed Cases (By Day Since January 01, 2020) - Colored By Country, Size of Bubble by Death Count</title>
       <chart>
         <search base="base">
-          <query>
-| fields - Lat Long "Province/State" 
+          <query>| fields * |  fields - Lat Long "Province/State" 
 | rename "Country/Region" as Country 
 | stats sum(*) as * by Country 
+| search $country$
+
 | dedup Country 
 | untable Country _time count 
 | eval _time=strptime(_time,"%m/%d/%y") 
@@ -309,14 +408,110 @@
     | table days count Country
     | rename count as death_count
         ]</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
         </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
         <option name="charting.axisTitleX.text">Days since January 01, 2020</option>
         <option name="charting.axisTitleX.visibility">visible</option>
         <option name="charting.axisTitleY.text">Confirmed Cases</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
         <option name="charting.axisY.scale">log</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
         <option name="charting.chart">bubble</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
         <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
       </chart>
     </panel>
   </row>
-</dashboard>
+  <row>
+    <panel>
+      <title>Total Confirmed Cases (With Average Trend Line)</title>
+      <chart>
+        <search base="base">
+          <query> | fields * |  fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| search $country$
+
+| dedup Country 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 - _time 
+| addtotals 
+| fields _time Total 
+| eval num=1 
+| streamstats sum(num) as num 
+| eventstats max(Total) as max min(Total) as min max(num) as max_points 
+| eval trend=max/max_points
+| fields - min max max_points num
+| sort 0 + Total 
+| streamstats sum(trend) as "Average Cases"
+ |fields - trend
+ | rename "Total" as "Total Cases"</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.overlayFields">"Average Cases"</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+  </row>
+</form>
