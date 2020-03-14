@@ -27,7 +27,18 @@ There are two dashboards here:
 
 There is a scripted input inside of this app that can be enabled. It can be found in the GUI by going to Settings > Data Inputs > Scripts and enabling the input "update_git.sh". 
 
-This scripted input will send it's output by default to `index=main sourcetype=git_update_corona`. You can use this index/sourcetype to find out when the latest update to the Coronavirus git repository took place. An example update would look like this:
+This scripted input will send it's output by default to `index=main sourcetype=git_update_corona`. You can use this index/sourcetype to find out when the latest update to the Coronavirus git repository took place. 
+
+A search to find out when the last time the JHU Git Repository was updated would look like the following:
+
+```
+index=main sourcetype=git_update_corona _raw!="*Already up to date.*" 
+| head 1 
+| eval time=strftime(_time,"%m/%d/%Y %H:%M:%S") 
+| table time
+```
+
+An example update would look like this:
 
 ```
 2020-03-09 20:59:32	Entering 'git/COVID-19'
