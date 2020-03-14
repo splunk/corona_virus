@@ -6,6 +6,10 @@ This is a set of dashboards for analyzing the Corona Virus using Splunk. Created
 
 This app should be installed directly into $SPLUNK_HOME/etc/apps. You simply clone the app directly into that directory and it will be self-contained. 
 
+### App Requirements
+
+For all dashboards to load optimally, please ensure you have the [Maps+ App installed from Splunkbase](https://splunkbase.splunk.com/app/3124/). 
+
 ### Specific Requirements for Cloning the Directory.
 
 This package depends on a submodule from here: https://github.com/CSSEGISandData/COVID-19 which is the main source of data for the Coronavirus. As a result, when you run git clone, please add the --recurse-submodules parameter after the clone. So for example:
