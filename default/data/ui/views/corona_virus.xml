@@ -60,7 +60,6 @@
 | eval date = _time
 | eval date=strftime(date,"%m/%d/%y")
 | fields date</query>
-
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">none</option>
@@ -356,21 +355,18 @@
       </table>
     </panel>
     <panel>
-      <title>Confirmed Cases Over Time (By Country)</title>
+      <title>Top 25 Countries with Reported Cases (Over Time)</title>
       <chart>
         <search base="base">
-          <query>
-| fields * 
-| fields - Lat Long "Province/State" 
+          <query>| fields - Lat Long "Province/State" 
 | rename "Country/Region" as Country 
-| search $country$
-
 | stats sum(*) as * by Country 
-| dedup Country 
+| dedup Country
+| addtotals
+| sort 0 - Total
+| head 25
+| fields - Total
 | transpose 0 column_name=_time header_field=Country</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
