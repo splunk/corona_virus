@@ -1,6 +1,7 @@
 <nav search_view="search">
   <view name="corona_virus"  default='true'  />
-  <view name="coronavirus_timelapse"  default='true'  />
+  <view name="coronavirus_timelapse" />
+  <view name="confirmed_cases_location_overlay" />
   <view name="search"/>
   <view name="dashboards" />
 </nav>
