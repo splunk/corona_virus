@@ -22,6 +22,8 @@ There are two dashboards here:
     1. This is a static analysis of the Coronavirus. 
 1. Coronavirus - Timelapse
     1. This is a timelapse of the Coronavirus from the first day it was detected, until the current day. 
+1. Confirmed Cases/Locations Overlay
+    1. This is a dashboard that can be used to overlay locations of your choosing, with confirmed cases of COVID-19. By default, we are simply using U.S. State Capitals as an example. But you can choose to modify locations.csv to fit your own purposes. 
     
 ## Lookup Table Updating
 
