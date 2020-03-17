@@ -387,7 +387,7 @@
         <option name="charting.chart.nullValueMode">gaps</option>
         <option name="charting.chart.showDataLabels">none</option>
         <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.stackMode">stacked</option>
         <option name="charting.chart.style">shiny</option>
         <option name="charting.drilldown">none</option>
         <option name="charting.layout.splitSeries">0</option>
@@ -408,19 +408,21 @@
       <title>Confirmed Cases (By Day Since January 01, 2020) - Colored By Country, Size of Bubble by Death Count</title>
       <chart>
         <search base="base">
-          <query>| fields * |  fields - Lat Long "Province/State" 
+          <query>| fields - Lat Long "Province/State" 
 | rename "Country/Region" as Country 
 | stats sum(*) as * by Country 
-| search $country$
-
 | dedup Country 
+| search $country$
+| addtotals 
+| sort 0 - Total 
+| head 25 
+| fields - Total 
 | untable Country _time count 
 | eval _time=strptime(_time,"%m/%d/%y") 
 | eval starttime="01012020" 
 | eval time2=strptime(starttime,"%m%d%Y") 
 | eval days=floor(((_time+86400)-time2)/86400) 
 | table days count Country 
-| table Country days count  
 | join Country days 
     [| inputlookup deaths.csv 
     | fields - Lat Long "Province/State" 
@@ -432,12 +434,10 @@
     | eval starttime="01012020" 
     | eval time2=strptime(starttime,"%m%d%Y") 
     | eval days=floor(((_time+86400)-time2)/86400) 
-    | table days count Country
+    | table Country days count 
     | rename count as death_count
-        ]</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-          <sampleRatio>1</sampleRatio>
+        ] 
+| fields Country days count death_count</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -478,32 +478,36 @@
   </row>
   <row>
     <panel>
-      <title>Total Confirmed Cases (With Average Trend Line)</title>
+      <title>Total Confirmed Cases (With Overall Infection Rate Calculated Each Day)</title>
       <chart>
         <search base="base">
-          <query> | fields * |  fields - Lat Long "Province/State" 
+          <query>| fields - Lat Long "Province/State" 
 | rename "Country/Region" as Country 
 | stats sum(*) as * by Country 
-| search $country$
-
 | dedup Country 
 | transpose 0 column_name=_time header_field=Country 
 | eval _time=strptime(_time,"%m/%d/%y") 
-| sort 0 - _time 
+| sort 0 + _time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor((_time-time2)/86400) 
+| fields days * 
+| fields - days starttime time2 *username* 
+| fields _time * 
 | addtotals 
 | fields _time Total 
 | eval num=1 
 | streamstats sum(num) as num 
 | eventstats max(Total) as max min(Total) as min max(num) as max_points 
-| eval trend=max/max_points
-| fields - min max max_points num
+| eval trend=max/max_points 
+| fields - min max max_points 
 | sort 0 + Total 
-| streamstats sum(trend) as "Average Cases"
- |fields - trend
- | rename "Total" as "Total Cases"</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-          <sampleRatio>1</sampleRatio>
+| streamstats sum(trend) as "Average Cases (All-Time)" 
+| fields - trend 
+| rename "Total" as "Total Cases" 
+| eval "Overall Infection Rate"='Total Cases'/num 
+| fields - num "Average Cases (All-Time)"
+| eventstats max("Overall Infection Rate") as "Maximum Infection Rate"</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -515,14 +519,14 @@
         <option name="charting.axisY.abbreviation">none</option>
         <option name="charting.axisY.scale">linear</option>
         <option name="charting.axisY2.abbreviation">none</option>
-        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.enabled">1</option>
         <option name="charting.axisY2.scale">inherit</option>
         <option name="charting.chart">area</option>
         <option name="charting.chart.bubbleMaximumSize">50</option>
         <option name="charting.chart.bubbleMinimumSize">10</option>
         <option name="charting.chart.bubbleSizeBy">area</option>
         <option name="charting.chart.nullValueMode">gaps</option>
-        <option name="charting.chart.overlayFields">"Average Cases"</option>
+        <option name="charting.chart.overlayFields">"Overall Infection Rate","Maximum Infection Rate"</option>
         <option name="charting.chart.showDataLabels">none</option>
         <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
         <option name="charting.chart.stackMode">default</option>
