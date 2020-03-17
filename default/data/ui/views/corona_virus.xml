@@ -274,12 +274,12 @@
       <title>Total Cases by Country</title>
       <table>
         <search base="base">
-          <query>
-| fields * 
-| fields - "Province/State" 
+          <query>| fields - "Province/State" 
 | rename "Country/Region" as Country 
-| search $country$
-| eval Country=Country+","+Lat+","+Long 
+| eval total_date_columns=1 
+| foreach *20 
+    [ eval total_date_columns=total_date_columns+1 ] 
+| eval Country=Country+"&amp;&amp;&amp;&amp;"+Lat+"&amp;&amp;&amp;&amp;"+Long+"&amp;&amp;&amp;&amp;"+total_date_columns 
 | stats sum(*) as * by Country 
 | dedup Country 
 | transpose 0 column_name=_time header_field=Country 
@@ -290,17 +290,17 @@
 | transpose 
 | rename column as "Country", "row 1" as "Confirmed" 
 | sort 0 - Total 
-| eval fields=split(Country,",") 
+| eval fields=split(Country,"&amp;&amp;&amp;&amp;") 
 | eval Lat=mvindex(fields,1) 
 | eval Long=mvindex(fields,2) 
+| eval num_data_points=mvindex(fields,3) 
 | eval Country=mvindex(fields,0) 
-| fields - fields 
-| sort 0 + Country Lat Long 
+| fields - fields
 | appendcols 
     [| inputlookup deaths.csv 
     | fields - "Province/State" 
     | rename "Country/Region" as Country 
-| search $country$
+    | search (Country="*") 
     | eval Country=Country+","+Lat+","+Long 
     | stats sum(*) as * by Country 
     | dedup Country 
@@ -322,7 +322,7 @@
     [| inputlookup recovered.csv 
     | fields - "Province/State" 
     | rename "Country/Region" as Country 
-| search $country$
+    | search (Country="*") 
     | eval Country=Country+","+Lat+","+Long 
     | stats sum(*) as * by Country 
     | dedup Country 
@@ -340,10 +340,10 @@
     | eval Country=mvindex(fields,0) 
     | fields - fields 
     | sort 0 + Country Lat Long] 
-| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered by Country</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-          <sampleRatio>1</sampleRatio>
+| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered max(# Confirmed/Day) as "# Confirmed/Day" max(num_data_points) as num_data_points by Country
+| eval "# Confirmed/Day" =round(Confirmed/num_data_points,0)
+| sort 0 - Confirmed
+|  fields Country Confirmed Deaths Recovered "# Confirmed/Day"</query>
         </search>
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">none</option>
@@ -405,7 +405,7 @@
   </row>
   <row>
     <panel>
-      <title>Confirmed Cases (By Day Since January 01, 2020) - Colored By Country, Size of Bubble by Death Count</title>
+      <title>Top 25 Countries with Confirmed Cases (By Day Since January 01, 2020) - Colored By Country, Size of Bubble by Death Count</title>
       <chart>
         <search base="base">
           <query>| fields - Lat Long "Province/State" 

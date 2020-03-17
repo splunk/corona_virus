@@ -413,14 +413,17 @@
       </table>
     </panel>
     <panel>
-      <title>Confirmed Cases Over Time (By Country)</title>
+      <title>Top 25 Countries with Confirmed Cases Over Time (By Country)</title>
       <chart>
         <search base="base">
-          <query>| fields * 
-| fields - Lat Long "Province/State" 
+          <query>| fields - Lat Long "Province/State" 
 | rename "Country/Region" as Country 
 | stats sum(*) as * by Country 
 | dedup Country 
+| addtotals
+| sort 0 - Total
+| head 25
+| fields - Total
 | transpose 0 column_name=_time header_field=Country 
 | eval _time=strptime(_time,"%m/%d/%y") 
 | sort 0 + _time 
@@ -444,6 +447,7 @@
         <option name="charting.axisTitleX.text">Date</option>
         <option name="charting.chart">area</option>
         <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.stackMode">stacked</option>
         <option name="charting.drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </chart>
