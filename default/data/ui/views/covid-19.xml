@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<view template="corona_virus:/templates/covid-19.html" type="html">
+    <label>covid-19 Patterns &amp; Trends</label>
+</view>
