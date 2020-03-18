@@ -559,7 +559,7 @@
 | rename "Country/Region" as Country 
 | stats sum(*) as * by Country 
 | dedup Country 
-| search (Country="Spain") 
+| search $country$
 | transpose 0 column_name=_time header_field=Country 
 | eval _time=strptime(_time,"%m/%d/%y") 
 | sort 0 + _time 
