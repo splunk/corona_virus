@@ -360,6 +360,7 @@
         <search base="base">
           <query>| fields - Lat Long "Province/State" 
 | rename "Country/Region" as Country 
+| search $country$
 | stats sum(*) as * by Country 
 | dedup Country
 | addtotals
@@ -485,6 +486,7 @@
 | rename "Country/Region" as Country 
 | stats sum(*) as * by Country 
 | dedup Country 
+| search $country$
 | transpose 0 column_name=_time header_field=Country 
 | eval _time=strptime(_time,"%m/%d/%y") 
 | sort 0 + _time 
