@@ -343,7 +343,8 @@
 | stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered max(# Confirmed/Day) as "# Confirmed/Day" max(num_data_points) as num_data_points by Country
 | eval "# Confirmed/Day" =round(Confirmed/num_data_points,0)
 | sort 0 - Confirmed
-|  fields Country Confirmed Deaths Recovered "# Confirmed/Day"</query>
+|  fields Country Confirmed Deaths Recovered "# Confirmed/Day"
+| search $country$</query>
         </search>
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">none</option>
@@ -509,7 +510,11 @@
 | rename "Total" as "Total Cases" 
 | eval "Overall Infection Rate"='Total Cases'/num 
 | fields - num "Average Cases (All-Time)"
-| eventstats max("Overall Infection Rate") as "Maximum Infection Rate"</query>
+| eventstats max("Overall Infection Rate") as "Maximum Infection Rate"
+| rename "Total Cases" as "TotalCases"
+| streamstats current=f window=2 last(TotalCases) as last
+| rename TotalCases as "Total Cases"
+| fields - last</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -528,7 +533,70 @@
         <option name="charting.chart.bubbleMinimumSize">10</option>
         <option name="charting.chart.bubbleSizeBy">area</option>
         <option name="charting.chart.nullValueMode">gaps</option>
-        <option name="charting.chart.overlayFields">"Overall Infection Rate","Maximum Infection Rate"</option>
+        <option name="charting.chart.overlayFields">"Overall Infection Rate","Maximum Infection Rate","Percent Increase"</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Daily Infection Rate</title>
+      <chart>
+        <search base="base">
+          <query>| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| search (Country="Spain") 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 + _time 
+| eval starttime="01012020" 
+| eval time2=strptime(starttime,"%m%d%Y") 
+| eval days=floor((_time-time2)/86400) 
+| fields days * 
+| fields - days starttime time2 *username* 
+| fields _time * 
+| addtotals 
+| fields _time Total 
+| rename "Total" as "Total Cases" 
+| rename "Total Cases" as "TotalCases" 
+| streamstats current=f window=2 last(TotalCases) as last 
+| eval perc_incr=((TotalCases-last)/last)*100 
+| rename TotalCases as "Total Cases", perc_incr as "Daily Infection Rate" 
+| fields - last 
+| fields _time "Total Cases"  "Daily Infection Rate"</query>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">1</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.overlayFields">"Total Cases"</option>
         <option name="charting.chart.showDataLabels">none</option>
         <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
         <option name="charting.chart.stackMode">default</option>
