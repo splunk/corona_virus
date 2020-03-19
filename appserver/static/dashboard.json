@@ -24,12 +24,12 @@
 				"src": "/static/app/corona_virus/images/deaths.svg"
 			}
 		},
-           	"viz_XtPDZZ5y": {
-                        "type": "viz.img",
-                        "options": {
-                                "src": "/static/app/corona_virus/images/legend.svg"
-                        }
-                },
+		"viz_XtPDZZ5y": {
+			"type": "viz.img",
+			"options": {
+				"src": "/static/app/corona_virus/images/legend.svg"
+			}
+		},
 		"viz_pcCilmMK": {
 			"type": "viz.singlevalue",
 			"options": {
@@ -150,7 +150,7 @@
 				"chart.stackMode": "stacked",
 				"backgroundColor": "#ffffff",
 				"seriesColors": "[#A870EF,#A9F5E7, #45D4BA,#1E6271,#602CA1,#9AE6F7,#2F8AA7,#422879,#F29BAC,#E85B79,#C6335F,#FDAF93,#FB865C,#E9643A,#7EEFDA,#26AA92,#207865,#C093F9,#8847DA,#4EB2D2,#912344]",
-				"axisTitleY.text": "Number of Cases",
+				"axisTitleY.text": "Number of Cases (linear scale)",
 				"axisTitleX.visibility": "collapsed"
 			},
 			"dataSources": {
@@ -195,8 +195,7 @@
 					"field": "primary.Deaths",
 					"format": {
 						"type": "rangevalue",
-						"ranges": [
-							{
+						"ranges": [{
 								"from": 3000,
 								"value": "#4665D6"
 							},
@@ -269,7 +268,7 @@
 				"axisY.scale": "log",
 				"seriesColors": "[#A870EF,#A9F5E7, #45D4BA,#1E6271,#602CA1,#9AE6F7,#2F8AA7,#422879,#F29BAC,#E85B79,#C6335F,#FDAF93,#FB865C,#E9643A,#7EEFDA,#26AA92,#207865,#C093F9,#8847DA,#4EB2D2,#912344]",
 				"axisTitleX.text": "Days",
-				"axisTitleY.text": "Number"
+				"axisTitleY.text": "Number (log scale)"
 			},
 			"dataSources": {
 				"primary": "ds_DS4CmivD"
@@ -290,15 +289,13 @@
 				"fontSize": 12,
 				"textColor": "#0877a6"
 			},
-			"eventHandlers": [
-				{
-					"type": "drilldown.customUrl",
-					"options": {
-						"url": "https://github.com/CSSEGISandData/COVID-19",
-						"newTab": true
-					}
+			"eventHandlers": [{
+				"type": "drilldown.customUrl",
+				"options": {
+					"url": "https://github.com/CSSEGISandData/COVID-19",
+					"newTab": true
 				}
-			]
+			}]
 		},
 		"viz_RqU59rBG": {
 			"type": "viz.text",
@@ -632,8 +629,7 @@
 			"height": 930,
 			"display": "auto-scale"
 		},
-		"structure": [
-			{
+		"structure": [{
 				"item": "viz_n8ekjKfS",
 				"type": "block",
 				"position": {
