@@ -1,882 +1,930 @@
 {
-  "visualizations": {
-    "viz_pcCilmMK": {
-      "type": "viz.singlevalue",
-      "options": {
-        "backgroundColor": "transparent",
-        "showSparkline": false
-      },
-      "dataSources": {
-        "primary": "ds_gNUf7Hed"
-      },
-      "title": ""
-    },
-    "viz_wtTBNmNq": {
-      "type": "viz.singlevalue",
-      "options": {
-        "backgroundColor": "transparent",
-        "showSparkline": false
-      },
-      "dataSources": {
-        "primary": "ds_URa3JoDI"
-      },
-      "title": ""
-    },
-    "viz_77uORneX": {
-      "type": "viz.table",
-      "options": {
-        "backgroundColor": "#ffffff",
-        "headerBackgroundColor": "#F5F5F5",
-        "rowBackgroundColorOdd": "#ffffff",
-        "rowBackgroundColorEven": "#ffffff",
-        "headerTextColor": "#000000",
-        "rowTextColorOdd": "#000000",
-        "rowTextColorEven": "#000000",
-        "useThousandSeparators": true,
-        "count": 10
-      },
-      "dataSources": {
-        "primary": "ds_DR7r9VJQ"
-      },
-      "title": "Confirmed Cases by Country (Since January 22, 2020)"
-    },
-    "viz_FJEV8EEa": {
-      "type": "viz.singlevalue",
-      "options": {
-        "showSparkline": false,
-        "backgroundColor": "transparent"
-      },
-      "dataSources": {
-        "primary": "ds_e7al4sXu"
-      },
-      "encoding": {},
-      "title": ""
-    },
-    "viz_5n3AcTrS": {
-      "type": "viz.rectangle",
-      "options": {
-        "fill": "#FFFFFF",
-        "stroke": "transparent"
-      }
-    },
-    "viz_n8ekjKfS": {
-      "type": "viz.rectangle",
-      "options": {
-        "fill": "#ffffff",
-        "stroke": "transparent"
-      }
-    },
-    "viz_cKN7XOAT": {
-      "type": "viz.text",
-      "options": {
-        "content": "covid-19 Patterns & Trends"
-      }
-    },
-    "viz_5JkJ8CUx": {
-      "type": "viz.rectangle",
-      "options": {
-        "fill": "#ffffff",
-        "stroke": "transparent"
-      }
-    },
-    "viz_j38deXxt": {
-      "type": "viz.text",
-      "options": {
-        "content": "Total Global Confirmed Cases",
-        "fontSize": 14
-      }
-    },
-    "viz_utwSiL6j": {
-      "type": "viz.rectangle",
-      "options": {
-        "fill": "#ffffff",
-        "stroke": "transparent"
-      }
-    },
-    "viz_eIiNMRYY": {
-      "type": "viz.rectangle",
-      "options": {
-        "fill": "#ffffff",
-        "stroke": "transparent"
-      }
-    },
-    "viz_o3iQOFLX": {
-      "type": "viz.text",
-      "options": {
-        "content": "Total Recoveries",
-        "fontSize": 14
-      }
-    },
-    "viz_DH9k779T": {
-      "type": "viz.text",
-      "options": {
-        "content": "Total Deaths",
-        "fontSize": 14
-      }
-    },
-    "viz_1DbnnCNQ": {
-      "type": "viz.area",
-      "options": {
-        "chart.stackMode": "stacked",
-        "backgroundColor": "#ffffff",
-        "seriesColors": "[#A870EF,#A9F5E7, #45D4BA,#1E6271,#602CA1,#9AE6F7,#2F8AA7,#422879,#F29BAC,#E85B79,#C6335F,#FDAF93,#FB865C,#E9643A,#7EEFDA,#26AA92,#207865,#C093F9,#8847DA,#4EB2D2,#912344]",
-        "axisTitleY.text": "Number of Cases",
-        "axisTitleX.visibility": "collapsed"
-      },
-      "dataSources": {
-        "primary": "ds_Uxpiy3fW"
-      },
-      "title": "Top 25 Countries with Reported Cases (Over Time)"
-    },
-    "viz_hjyEEOG9": {
-      "type": "viz.geojson.world",
-      "options": {
-        "name": "WORLD",
-        "source": "geo://default/world",
-        "projection": "mercator",
-        "sourceBounds": {
-          "lat": {
-            "min": -60,
-            "max": 85
-          },
-          "long": {
-            "min": -180,
-            "max": 180
-          }
-        },
-        "logicalBounds": {
-          "x": {
-            "min": 0,
-            "max": 800
-          },
-          "y": {
-            "min": 0,
-            "max": 600
-          }
-        },
-        "fillColor": "#F5F5F5",
-        "strokeColor": "#DDDDDD",
-        "strokeHighlightColor": "#000000",
-        "selector": ".feature"
-      },
-      "encoding": {
-        "featureId": "primary.Country",
-        "fill": {
-          "field": "primary.Deaths",
-          "format": {
-            "type": "rangevalue",
-            "ranges": [
-              {
-                "from": 3000,
-                "value": "#4665D6"
-              },
-              {
-                "from": 1000,
-                "to": 3000,
-                "value": "#5E79DE"
-              },
-              {
-                "from": 500,
-                "to": 1000,
-                "value": "#7088E4"
-              },
-              {
-                "from": 100,
-                "to": 500,
-                "value": "#7F95E9"
-              },
-              {
-                "from": 50,
-                "to": 100,
-                "value": "#8EA1EE"
-              },
-              {
-                "from": 20,
-                "to": 50,
-                "value": "#A0B0F4"
-              },
-              {
-                "from": 10,
-                "to": 20,
-                "value": "#A7B6F7"
-              },
-              {
-                "from": 1,
-                "to": 10,
-                "value": "#A7B6F7"
-              },
-              {
-                "to": 1,
-                "value": "#F5F5F5"
-              }
-            ]
-          }
-        },
-        "value": "primary.Deaths"
-      },
-      "dataSources": {
-        "primary": "ds_IhOvuh5I"
-      }
-    },
-    "viz_xWfufymt": {
-      "type": "viz.text",
-      "options": {
-        "content": "Deaths by Country",
-        "fontSize": 15,
-        "fontWeight": "bold"
-      }
-    },
-    "viz_5lYBB7BZ": {
-      "type": "viz.img",
-      "options": {
-        "src": "/static/app/corona_virus/images/logo.svg"
-      }
-    },
-    "viz_5hYhnSJV": {
-      "type": "viz.img",
-      "options": {
-        "src": "/static/app/corona_virus/images/confirmed.svg"
-      }
-    },
-    "viz_wPJAAPiI": {
-      "type": "viz.img",
-      "options": {
-        "src": "/static/app/corona_virus/images/recovered.svg"
-      }
-    },
-    "viz_pX3aDfZI": {
-      "type": "viz.img",
-      "options": {
-        "src": "/static/app/corona_virus/images/deaths.svg"
-      }
-    },
-    "viz_Vrh5chUX": {
-      "type": "viz.bubble",
-      "encoding": {
-        "category": "primary.Country",
-        "size": "primary.death_count",
-        "x": "primary.days",
-        "y": "primary.count"
-      },
-      "options": {
-        "backgroundColor": "#ffffff",
-        "axisY.scale": "log",
-        "seriesColors": "[#A870EF,#A9F5E7, #45D4BA,#1E6271,#602CA1,#9AE6F7,#2F8AA7,#422879,#F29BAC,#E85B79,#C6335F,#FDAF93,#FB865C,#E9643A,#7EEFDA,#26AA92,#207865,#C093F9,#8847DA,#4EB2D2,#912344]",
-        "axisTitleX.text": "Days",
-        "axisTitleY.text": "Number"
-      },
-      "dataSources": {
-        "primary": "ds_DS4CmivD"
-      },
-      "title": "Confirmed Cases by Country over Time"
-    },
-    "viz_XtPDZZ5y": {
-      "type": "viz.img",
-      "options": {
-        "src": "/static/app/corona_virus/images/legend.svg"
-      }
-    },
-    "viz_QqYMgs26": {
-      "type": "viz.rectangle",
-      "options": {
-        "fill": "#ffffff",
-        "stroke": "transparent"
-      }
-    },
-    "viz_DncdtjGz": {
-      "type": "viz.text",
-      "options": {
-        "content": " https://github.com/CSSEGISandData/COVID-19",
-        "fontSize": 12,
-        "textColor": "#0877a6"
-      },
-      "eventHandlers": [
-        {
-          "type": "drilldown.customUrl",
-          "options": {
-            "url": "https://github.com/CSSEGISandData/COVID-19",
-            "newTab": true
-          }
-        }
-      ]
-    },
-    "viz_RqU59rBG": {
-      "type": "viz.text",
-      "options": {
-        "content": "Data is kept up to date with the latest published here:",
-        "fontSize": 12
-      }
-    },
-    "viz_CwPOaX3b": {
-      "type": "viz.rectangle",
-      "options": {
-        "fill": "#ffffff",
-        "strokeWidth": 0
-      }
-    },
-    "viz_b3Ib1UAx": {
-      "type": "viz.text",
-      "options": {
-        "content": "This dashboard is an informational tool provided by Splunk without charge to all those who are working to understand and combat COVID-19.  The dashboard is intended for informational purposes only and relies entirely on data provided by various third-parties including, inter alia, Johns Hopkins University and any information entered by the user. https://github.com/CSSEGISandData/COVID-19. This dashboard is not for commercial use and is intended and should be used to provide background and context on the evolving COVID-19 situation.  Splunk disclaims any and all representations and warranties with respect to the dashboard, including accuracy, fitness for use and merchantability.",
-        "fontSize": 11.5
-      }
-    }
-  },
-  "dataSources": {
-    "ds_DS4CmivD": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "|inputlookup confirmed.csv | fields * |  fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country\n\n\n| addtotals\n| sort 0 - Total\n| head 20\n| fields - Total\n| untable Country _time count \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| eval starttime=\"01012020\" \n| eval time2=strptime(starttime,\"%m%d%Y\") \n| eval days=floor(((_time+86400)-time2)/86400) \n| table days count Country\n| join Country days \n    [| inputlookup deaths.csv \n    | fields - Lat Long \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | stats sum(*) as * by Country \n    | dedup Country \n    | untable Country _time count \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | eval starttime=\"01012020\" \n    | eval time2=strptime(starttime,\"%m%d%Y\") \n    | eval days=floor(((_time+86400)-time2)/86400) \n    | table Country days count\n    | rename count as death_count\n        ]"
-      },
-      "name": "Bubble"
-    },
-    "ds_YMfcDpNy": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region=\"US\" \n| rex field=Province_State \"(?<abbr_State>[A-Z]{2})\"\n| lookup abbr_state.csv abbr AS abbr_State OUTPUTNEW State AS State\n|stats sum(conf) as \"Confirmed Cases\" by State\n| geom geo_us_states featureIdField=State"
-      },
-      "name": "statesMap"
-    },
-    "ds_WDzrlKZe": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| stats sum(conf) as cases, sum(deaths) as deaths, sum(recoveries) as recoveries by Country_Region \n| search Country_Region=Australia \n| transpose \n| reverse \n| head 3 \n| rename column as status, \"row 1\" as count"
-      },
-      "name": "ausStatus"
-    },
-    "ds_mFurx7Gk": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| stats sum(recoveries) as recoveries by Country_Region\n| rename Country_Region as Country, recoveries as count|sort - count"
-      },
-      "name": "RecoveriesByCountry"
-    },
-    "ds_k5vcliHe": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| stats sum(deaths) as deaths by Country_Region|sort - deaths"
-      },
-      "name": "DeathsByCountry"
-    },
-    "ds_62Ur1ZnT": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n|lookup corona_id_lookup.csv id as id \n| stats sum(conf) as count, sum(deaths) as deaths, sum(recoveries) as recoveries by Country_Region \n| eval Country_Region=if(Country_Region=\"Mainland China\",\"China\",Country_Region) \n| eval Country_Region=if(Country_Region=\"US\",\"United States\",Country_Region) \n| eval Country_Region=if(Country_Region=\"UK\",\"United Kingdom\",Country_Region) \n| table Country_Region count \n| geom geo_countries featureIdField=\"Country_Region\" \n| sort - count"
-      },
-      "name": "MapCasesByCountry"
-    },
-    "ds_hWBNRB7j": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| stats sum(conf) as Cases by Country_Region|sort - Cases \n| rename Country_Region as Country"
-      },
-      "name": "CasesByCountryTable"
-    },
-    "ds_UAZzK4qM": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region!=Mainland* \n| stats sum(conf) as cases by Country_Region\n|sort - cases\n|head 15"
-      },
-      "name": "CasesOutsideChina"
-    },
-    "ds_xjieWPLf": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region=Mainland* \n| stats sum(conf) as cases by Province_State\n|sort - cases\n| head 10"
-      },
-      "name": "CasesWithinChina"
-    },
-    "ds_L1sx1GHN": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region=US \n| rex field=Province_State \"[\\w\\s\\,]+(?<code>\\w{2})\" \n| lookup us_region.csv Code as code \n| stats sum(conf) as conf by Region\n| search Region=West\n| table conf"
-      },
-      "name": "West"
-    },
-    "ds_p1r9icwV": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region=US \n| rex field=Province_State \"[\\w\\s\\,]+(?<code>\\w{2})\" \n| lookup us_region.csv Code as code \n| stats sum(conf) as conf by Region\n| search Region=Northeast\n| table conf"
-      },
-      "name": "Northeast"
-    },
-    "ds_xt01k12W": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region=US \n| rex field=Province_State \"[\\w\\s\\,]+(?<code>\\w{2})\" \n| lookup us_region.csv Code as code \n| stats sum(conf) as conf by Region|search Region=South|table conf"
-      },
-      "name": "South"
-    },
-    "ds_QeRtEl3M": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": ""
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region=US \n| rex field=Province_State \"[\\w\\s\\,]+(?<code>\\w{2})\" \n| lookup us_region.csv Code as code \n| stats sum(conf) as conf by Region|search Region=Midwest|table conf"
-      },
-      "name": "West"
-    },
-    "ds_e7al4sXu": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": "now"
-        },
-        "query": "|inputlookup confirmed.csv | fields * |  fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country \n| transpose 0 column_name=_time header_field=Country \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1\n| fields - _time\n| transpose\n| rename column as \"Country\", \"row 1\" as \"Total\" \n| sort 0 - Total\n| stats sum(Total) as Total"
-      },
-      "name": "TotalCases"
-    },
-    "ds_mmPemKFa": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": "now"
-        },
-        "query": "index=\"summary_epidemic\" \n| bin _time span=1d \n| stats latest(conf) as conf, latest(recoveries) as recoveries, latest(deaths) as deaths by id _time \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by _time|table _time recoveries"
-      },
-      "name": "TotalRecTrend"
-    },
-    "ds_8Bie7nk8": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": "now"
-        },
-        "query": "index=\"summary_epidemic\" \n| bin _time span=1d \n| stats latest(conf) as conf, latest(recoveries) as recoveries, latest(deaths) as deaths by id _time \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by _time|table _time deaths"
-      },
-      "name": "TotalDeathTrend"
-    },
-    "ds_S0QQXZrH": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": "now"
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n|lookup corona_id_lookup.csv id as id \n| stats sum(conf) as count, sum(deaths) as deaths, sum(recoveries) as recoveries by Country_Region \n| eval Country_Region=if(Country_Region=\"Mainland China\",\"China\",Country_Region) \n| eval Country_Region=if(Country_Region=\"US\",\"United States\",Country_Region) \n| eval Country_Region=if(Country_Region=\"UK\",\"United Kingdom\",Country_Region) \n| table Country_Region count \n| geom geo_countries featureIdField=\"Country_Region\" \n| sort - count"
-      },
-      "name": "WorldChoropleth"
-    },
-    "ds_gaF79BTL": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": "now"
-        },
-        "query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id _time\n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id _time\n| stats sum(deaths) as \"deaths\" by _time"
-      },
-      "name": "AllDeathswithTrend"
-    },
-    "ds_URa3JoDI": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": "now"
-        },
-        "query": "| inputlookup recovered.csv \n| fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country \n| transpose 0 column_name=_time header_field=Country \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1\n| fields - _time\n| transpose\n| rename column as \"Country\", \"row 1\" as \"Total\" \n| sort 0 - Total\n| stats sum(Total) as Total"
-      },
-      "name": "TotalRecoveries"
-    },
-    "ds_gNUf7Hed": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": "now"
-        },
-        "query": "| inputlookup deaths.csv \n| fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country \n| transpose 0 column_name=_time header_field=Country \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1\n| fields - _time\n| transpose\n| rename column as \"Country\", \"row 1\" as \"Total\" \n| sort 0 - Total\n| stats sum(Total) as Total"
-      },
-      "name": "TotalDeaths"
-    },
-    "ds_DR7r9VJQ": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": "now"
-        },
-        "query": "| inputlookup confirmed.csv \n| fields - \"Province/State\" \n| rename \"Country/Region\" as Country \n| eval total_date_columns=1 \n| foreach *20 \n    [ eval total_date_columns=total_date_columns+1 ] \n| eval Country=Country+\"&&&&\"+Lat+\"&&&&\"+Long+\"&&&&\"+total_date_columns \n| stats sum(*) as * by Country \n| dedup Country \n| transpose 0 column_name=_time header_field=Country \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1 \n| fields - _time \n| transpose \n| rename column as \"Country\", \"row 1\" as \"Confirmed\" \n| sort 0 - Total \n| eval fields=split(Country,\"&&&&\") \n| eval Lat=mvindex(fields,1) \n| eval Long=mvindex(fields,2) \n| eval num_data_points=mvindex(fields,3) \n| eval Country=mvindex(fields,0) \n| fields - fields\n| appendcols \n    [| inputlookup deaths.csv \n    | fields - \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | search (Country=\"*\") \n    | eval Country=Country+\",\"+Lat+\",\"+Long \n    | stats sum(*) as * by Country \n    | dedup Country \n    | transpose 0 column_name=_time header_field=Country \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | sort 0 - _time \n    | head 1 \n    | fields - _time \n    | transpose \n    | rename column as \"Country\", \"row 1\" as \"Deaths\" \n    | sort 0 - Deaths \n    | eval fields=split(Country,\",\") \n    | eval Lat=mvindex(fields,1) \n    | eval Long=mvindex(fields,2) \n    | eval Country=mvindex(fields,0) \n    | fields - fields \n    | sort 0 + Country Lat Long] \n| appendcols \n    [| inputlookup recovered.csv \n    | fields - \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | search (Country=\"*\") \n    | eval Country=Country+\",\"+Lat+\",\"+Long \n    | stats sum(*) as * by Country \n    | dedup Country \n    | transpose 0 column_name=_time header_field=Country \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | sort 0 - _time \n    | head 1 \n    | fields - _time \n    | transpose \n    | rename column as \"Country\", \"row 1\" as \"Recovered\" \n    | sort 0 - Recovered \n    | eval fields=split(Country,\",\") \n    | eval Lat=mvindex(fields,1) \n    | eval Long=mvindex(fields,2) \n    | eval Country=mvindex(fields,0) \n    | fields - fields \n    | sort 0 + Country Lat Long] \n| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered max(# Confirmed/Day) as \"# Confirmed/Day\" max(num_data_points) as num_data_points by Country\n| eval \"# Confirmed/Day\" =round(Confirmed/num_data_points,0)\n| sort 0 - Confirmed\n|  fields Country Confirmed Deaths Recovered \"# Confirmed/Day\"\n"
-      },
-      "name": "Table"
-    },
-    "ds_Uxpiy3fW": {
-      "type": "ds.search",
-      "options": {
-        "query": "| inputlookup confirmed.csv \n| fields * \n| fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country\n| addtotals\n| sort 0 - Total\n| head 25\n| fields - Total\n| transpose 0 column_name=_time header_field=Country",
-        "queryParameters": {
-          "earliest": "0",
-          "latest": "now"
-        }
-      },
-      "name": "CasesOverTime"
-    },
-    "ds_O9hMRerL": {
-      "type": "ds.search",
-      "options": {
-        "query": "index=_internal \n|  stats count"
-      },
-      "name": "Search_1"
-    },
-    "ds_IhOvuh5I": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": "now"
-        },
-        "query": "| inputlookup deaths.csv \n| fields - \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country\n| transpose 0 column_name=_time header_field=Country\n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1 \n| fields - _time\n| transpose \n| rename column as \"Country\", \"row 1\" as \"Deaths\"\n|  sort - Deaths\n| replace \"US\" with \"United States\" in Country\n| replace \"Korea, South\" with \"Korea, Republic of\" in Country\n|  replace \"Iran\" with \"Iran (Islamic Republic of)\" in Country\n|  replace \"Congo (Kinshasa)\" with \"Democratic Republic of the Congo\" in Country\n| replace \"Taiwan*\" with \"Taiwan\" in Country"
-      },
-      "name": "WorldMap_USE"
-    },
-    "ds_U9ffgRQL": {
-      "type": "ds.search",
-      "options": {
-        "queryParameters": {
-          "earliest": "0",
-          "latest": "now"
-        },
-        "query": "| inputlookup deaths.csv \n| fields - \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country\n| transpose 0 column_name=_time header_field=Country\n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1 \n| fields - _time\n| transpose \n| rename column as \"Country\", \"row 1\" as \"Deaths\"\n| sort -Deaths"
-      },
-      "name": "WorldMap_Copy"
-    }
-  },
-  "inputs": {},
-  "layout": {
-    "type": "absolute",
-    "options": {
-      "backgroundColor": "#F5F5F5",
-      "width": 1800,
-      "height": 930,
-      "display": "auto-scale"
-    },
-    "structure": [
-      {
-        "item": "viz_CwPOaX3b",
-        "type": "block",
-        "position": {
-          "x": 1150,
-          "y": 20,
-          "w": 630,
-          "h": 430
-        }
-      },
-      {
-        "item": "viz_QqYMgs26",
-        "type": "block",
-        "position": {
-          "x": 1150,
-          "y": 420,
-          "w": 630,
-          "h": 50
-        }
-      },
-      {
-        "item": "viz_eIiNMRYY",
-        "type": "block",
-        "position": {
-          "x": 20,
-          "y": 380,
-          "w": 180,
-          "h": 90
-        }
-      },
-      {
-        "item": "viz_utwSiL6j",
-        "type": "block",
-        "position": {
-          "x": 220,
-          "y": 380,
-          "w": 180,
-          "h": 90
-        }
-      },
-      {
-        "item": "viz_5JkJ8CUx",
-        "type": "block",
-        "position": {
-          "x": 20,
-          "y": 240,
-          "w": 380,
-          "h": 120
-        }
-      },
-      {
-        "item": "viz_5n3AcTrS",
-        "type": "block",
-        "position": {
-          "x": 20,
-          "y": 10,
-          "w": 380,
-          "h": 120
-        }
-      },
-      {
-        "item": "viz_FJEV8EEa",
-        "type": "block",
-        "position": {
-          "x": 120,
-          "y": 270,
-          "w": 270,
-          "h": 80
-        }
-      },
-      {
-        "item": "viz_n8ekjKfS",
-        "type": "block",
-        "position": {
-          "x": 20,
-          "y": 150,
-          "w": 380,
-          "h": 80
-        }
-      },
-      {
-        "item": "viz_cKN7XOAT",
-        "type": "block",
-        "position": {
-          "x": 50,
-          "y": 160,
-          "w": 330,
-          "h": 50
-        }
-      },
-      {
-        "item": "viz_j38deXxt",
-        "type": "block",
-        "position": {
-          "x": 20,
-          "y": 235,
-          "w": 330,
-          "h": 50
-        }
-      },
-      {
-        "item": "viz_wtTBNmNq",
-        "type": "block",
-        "position": {
-          "x": 70,
-          "y": 420,
-          "w": 120,
-          "h": 40
-        }
-      },
-      {
-        "item": "viz_o3iQOFLX",
-        "type": "block",
-        "position": {
-          "x": 20,
-          "y": 375,
-          "w": 130,
-          "h": 50
-        }
-      },
-      {
-        "item": "viz_DH9k779T",
-        "type": "block",
-        "position": {
-          "x": 220,
-          "y": 380,
-          "w": 130,
-          "h": 50
-        }
-      },
-      {
-        "item": "viz_pcCilmMK",
-        "type": "block",
-        "position": {
-          "x": 290,
-          "y": 420,
-          "w": 90,
-          "h": 40
-        }
-      },
-      {
-        "item": "viz_1DbnnCNQ",
-        "type": "block",
-        "position": {
-          "x": 420,
-          "y": 20,
-          "w": 710,
-          "h": 450
-        }
-      },
-      {
-        "item": "viz_hjyEEOG9",
-        "type": "block",
-        "position": {
-          "x": 1150,
-          "y": 20,
-          "w": 630,
-          "h": 430
-        }
-      },
-      {
-        "item": "viz_xWfufymt",
-        "type": "block",
-        "position": {
-          "x": 1160,
-          "y": 20,
-          "w": 300,
-          "h": 50
-        }
-      },
-      {
-        "item": "viz_wPJAAPiI",
-        "type": "block",
-        "position": {
-          "x": 30,
-          "y": 420,
-          "w": 40,
-          "h": 40
-        }
-      },
-      {
-        "item": "viz_5hYhnSJV",
-        "type": "block",
-        "position": {
-          "x": 40,
-          "y": 280,
-          "w": 70,
-          "h": 70
-        }
-      },
-      {
-        "item": "viz_5lYBB7BZ",
-        "type": "block",
-        "position": {
-          "x": 30,
-          "y": 20,
-          "w": 360,
-          "h": 60
-        }
-      },
-      {
-        "item": "viz_pX3aDfZI",
-        "type": "block",
-        "position": {
-          "x": 230,
-          "y": 420,
-          "w": 40,
-          "h": 40
-        }
-      },
-      {
-        "item": "viz_XtPDZZ5y",
-        "type": "block",
-        "position": {
-          "x": 1520,
-          "y": 20,
-          "w": 250,
-          "h": 50
-        }
-      },
-      {
-        "item": "viz_DncdtjGz",
-        "type": "block",
-        "position": {
-          "x": 70,
-          "y": 95,
-          "w": 270,
-          "h": 50
-        }
-      },
-      {
-        "item": "viz_RqU59rBG",
-        "type": "block",
-        "position": {
-          "x": 60,
-          "y": 75,
-          "w": 290,
-          "h": 50
-        }
-      },
-      {
-        "item": "viz_77uORneX",
-        "type": "block",
-        "position": {
-          "x": 20,
-          "y": 480,
-          "w": 570,
-          "h": 400
-        }
-      },
-      {
-        "item": "viz_Vrh5chUX",
-        "type": "block",
-        "position": {
-          "x": 610,
-          "y": 480,
-          "w": 1170,
-          "h": 400
-        }
-      },
-      {
-        "item": "viz_b3Ib1UAx",
-        "type": "block",
-        "position": {
-          "x": 20,
-          "y": 875,
-          "w": 1760,
-          "h": 50
-        }
-      }
-    ]
-  },
-  "description": "",
-  "title": "Coronavirus (COVID-19)"
+	"visualizations": {
+		"viz_5lYBB7BZ": {
+			"type": "viz.img",
+			"options": {
+				"src": "/static/app/corona_virus/images/logo.svg"
+			}
+		},
+		"viz_5hYhnSJV": {
+			"type": "viz.img",
+			"options": {
+				"src": "/static/app/corona_virus/images/confirmed.svg"
+			}
+		},
+		"viz_wPJAAPiI": {
+			"type": "viz.img",
+			"options": {
+				"src": "/static/app/corona_virus/images/recovered.svg"
+			}
+		},
+		"viz_pX3aDfZI": {
+			"type": "viz.img",
+			"options": {
+				"src": "/static/app/corona_virus/images/deaths.svg"
+			}
+		},
+           	"viz_XtPDZZ5y": {
+                        "type": "viz.img",
+                        "options": {
+                                "src": "/static/app/corona_virus/images/legend.svg"
+                        }
+                },
+		"viz_pcCilmMK": {
+			"type": "viz.singlevalue",
+			"options": {
+				"backgroundColor": "transparent",
+				"showSparkline": false
+			},
+			"dataSources": {
+				"primary": "ds_gNUf7Hed"
+			},
+			"title": ""
+		},
+		"viz_wtTBNmNq": {
+			"type": "viz.singlevalue",
+			"options": {
+				"backgroundColor": "transparent",
+				"showSparkline": false
+			},
+			"dataSources": {
+				"primary": "ds_URa3JoDI"
+			},
+			"title": ""
+		},
+		"viz_77uORneX": {
+			"type": "viz.table",
+			"options": {
+				"backgroundColor": "#ffffff",
+				"headerBackgroundColor": "#F5F5F5",
+				"rowBackgroundColorOdd": "#fffffff",
+				"rowBackgroundColorEven": "#ffffff",
+				"headerTextColor": "#000000",
+				"rowTextColorOdd": "#000000",
+				"rowTextColorEven": "#000000",
+				"useThousandSeparators": true,
+				"count": 10
+			},
+			"dataSources": {
+				"primary": "ds_DR7r9VJQ"
+			},
+			"title": "Confirmed Cases by Country (Since January 22, 2020)"
+		},
+		"viz_FJEV8EEa": {
+			"type": "viz.singlevalue",
+			"options": {
+				"showSparkline": false,
+				"backgroundColor": "transparent"
+			},
+			"dataSources": {
+				"primary": "ds_e7al4sXu"
+			},
+			"encoding": {},
+			"title": ""
+		},
+		"viz_5n3AcTrS": {
+			"type": "viz.rectangle",
+			"options": {
+				"fill": "#FFFFFF",
+				"stroke": "transparent"
+			}
+		},
+		"viz_n8ekjKfS": {
+			"type": "viz.rectangle",
+			"options": {
+				"fill": "#ffffff",
+				"stroke": "transparent"
+			}
+		},
+		"viz_cKN7XOAT": {
+			"type": "viz.text",
+			"options": {
+				"content": "covid-19 Patterns & Trends"
+			}
+		},
+		"viz_5JkJ8CUx": {
+			"type": "viz.rectangle",
+			"options": {
+				"fill": "#ffffff",
+				"stroke": "transparent"
+			}
+		},
+		"viz_j38deXxt": {
+			"type": "viz.text",
+			"options": {
+				"content": "Total Global Confirmed Cases",
+				"fontSize": 14
+			}
+		},
+		"viz_utwSiL6j": {
+			"type": "viz.rectangle",
+			"options": {
+				"fill": "#ffffff",
+				"stroke": "transparent"
+			}
+		},
+		"viz_eIiNMRYY": {
+			"type": "viz.rectangle",
+			"options": {
+				"fill": "#ffffff",
+				"stroke": "transparent"
+			}
+		},
+		"viz_o3iQOFLX": {
+			"type": "viz.text",
+			"options": {
+				"content": "Total Recoveries",
+				"fontSize": 14
+			}
+		},
+		"viz_DH9k779T": {
+			"type": "viz.text",
+			"options": {
+				"content": "Total Deaths",
+				"fontSize": 14
+			}
+		},
+		"viz_1DbnnCNQ": {
+			"type": "viz.area",
+			"options": {
+				"chart.stackMode": "stacked",
+				"backgroundColor": "#ffffff",
+				"seriesColors": "[#A870EF,#A9F5E7, #45D4BA,#1E6271,#602CA1,#9AE6F7,#2F8AA7,#422879,#F29BAC,#E85B79,#C6335F,#FDAF93,#FB865C,#E9643A,#7EEFDA,#26AA92,#207865,#C093F9,#8847DA,#4EB2D2,#912344]",
+				"axisTitleY.text": "Number of Cases",
+				"axisTitleX.visibility": "collapsed"
+			},
+			"dataSources": {
+				"primary": "ds_Uxpiy3fW"
+			},
+			"title": "Top 25 Countries with Reported Cases (Over Time)"
+		},
+		"viz_hjyEEOG9": {
+			"type": "viz.geojson.world",
+			"options": {
+				"name": "WORLD",
+				"source": "geo://default/world",
+				"projection": "mercator",
+				"sourceBounds": {
+					"lat": {
+						"min": -60,
+						"max": 85
+					},
+					"long": {
+						"min": -180,
+						"max": 180
+					}
+				},
+				"logicalBounds": {
+					"x": {
+						"min": 0,
+						"max": 800
+					},
+					"y": {
+						"min": 0,
+						"max": 600
+					}
+				},
+				"fillColor": "#F5F5F5",
+				"strokeColor": "#DDDDDD",
+				"strokeHighlightColor": "#000000",
+				"selector": ".feature"
+			},
+			"encoding": {
+				"featureId": "primary.Country",
+				"fill": {
+					"field": "primary.Deaths",
+					"format": {
+						"type": "rangevalue",
+						"ranges": [
+							{
+								"from": 3000,
+								"value": "#4665D6"
+							},
+							{
+								"from": 1000,
+								"to": 3000,
+								"value": "#5E79DE"
+							},
+							{
+								"from": 500,
+								"to": 1000,
+								"value": "#7088E4"
+							},
+							{
+								"from": 100,
+								"to": 500,
+								"value": "#7F95E9"
+							},
+							{
+								"from": 50,
+								"to": 100,
+								"value": "#8EA1EE"
+							},
+							{
+								"from": 20,
+								"to": 50,
+								"value": "#A0B0F4"
+							},
+							{
+								"from": 10,
+								"to": 20,
+								"value": "#A7B6F7"
+							},
+							{
+								"from": 1,
+								"to": 10,
+								"value": "#A7B6F7"
+							},
+							{
+								"to": 1,
+								"value": "#F5F5F5"
+							}
+						]
+					}
+				},
+				"value": "primary.Deaths"
+			},
+			"dataSources": {
+				"primary": "ds_IhOvuh5I"
+			}
+		},
+		"viz_xWfufymt": {
+			"type": "viz.text",
+			"options": {
+				"content": "Deaths by Country",
+				"fontSize": 15,
+				"fontWeight": "bold"
+			}
+		},
+		"viz_Vrh5chUX": {
+			"type": "viz.bubble",
+			"encoding": {
+				"category": "primary.Country",
+				"size": "primary.death_count",
+				"x": "primary.days",
+				"y": "primary.count"
+			},
+			"options": {
+				"backgroundColor": "#ffffff",
+				"axisY.scale": "log",
+				"seriesColors": "[#A870EF,#A9F5E7, #45D4BA,#1E6271,#602CA1,#9AE6F7,#2F8AA7,#422879,#F29BAC,#E85B79,#C6335F,#FDAF93,#FB865C,#E9643A,#7EEFDA,#26AA92,#207865,#C093F9,#8847DA,#4EB2D2,#912344]",
+				"axisTitleX.text": "Days",
+				"axisTitleY.text": "Number"
+			},
+			"dataSources": {
+				"primary": "ds_DS4CmivD"
+			},
+			"title": "Confirmed Cases by Country over Time"
+		},
+		"viz_QqYMgs26": {
+			"type": "viz.rectangle",
+			"options": {
+				"fill": "#ffffff",
+				"stroke": "transparent"
+			}
+		},
+		"viz_DncdtjGz": {
+			"type": "viz.text",
+			"options": {
+				"content": " https://github.com/CSSEGISandData/COVID-19",
+				"fontSize": 12,
+				"textColor": "#0877a6"
+			},
+			"eventHandlers": [
+				{
+					"type": "drilldown.customUrl",
+					"options": {
+						"url": "https://github.com/CSSEGISandData/COVID-19",
+						"newTab": true
+					}
+				}
+			]
+		},
+		"viz_RqU59rBG": {
+			"type": "viz.text",
+			"options": {
+				"content": "Data is kept up to date with the latest published by JHU:",
+				"fontSize": 12
+			}
+		},
+		"viz_CwPOaX3b": {
+			"type": "viz.rectangle",
+			"options": {
+				"fill": "#ffffff",
+				"strokeWidth": 0
+			}
+		},
+		"viz_b3Ib1UAx": {
+			"type": "viz.text",
+			"options": {
+				"content": "This dashboard is an informational tool provided by Splunk without charge to all those who are working to understand and combat COVID-19.  The dashboard is intended for informational purposes only and relies entirely on data provided by various third-parties including, inter alia, Johns Hopkins University and any information entered by the user. https://github.com/CSSEGISandData/COVID-19. This dashboard is not for commercial use and is intended and should be used to provide background and context on the evolving COVID-19 situation.  Splunk disclaims any and all representations and warranties with respect to the dashboard, including accuracy, fitness for use and merchantability.",
+				"fontSize": 11.5
+			}
+		},
+		"viz_QP32VmYn": {
+			"type": "viz.table",
+			"options": {
+				"showHeader": false,
+				"count": 1
+			},
+			"dataSources": {
+				"primary": "ds_CnCRcp08"
+			}
+		},
+		"viz_lWTLPyji": {
+			"type": "viz.text",
+			"options": {
+				"content": "Last public JHU data update:",
+				"fontSize": 12
+			}
+		}
+	},
+	"dataSources": {
+		"ds_DS4CmivD": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "|inputlookup confirmed.csv | fields * |  fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country\n\n\n| addtotals\n| sort 0 - Total\n| head 20\n| fields - Total\n| untable Country _time count \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| eval starttime=\"01012020\" \n| eval time2=strptime(starttime,\"%m%d%Y\") \n| eval days=floor(((_time+86400)-time2)/86400) \n| table days count Country\n| join Country days \n    [| inputlookup deaths.csv \n    | fields - Lat Long \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | stats sum(*) as * by Country \n    | dedup Country \n    | untable Country _time count \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | eval starttime=\"01012020\" \n    | eval time2=strptime(starttime,\"%m%d%Y\") \n    | eval days=floor(((_time+86400)-time2)/86400) \n    | table Country days count\n    | rename count as death_count\n        ]"
+			},
+			"name": "Bubble"
+		},
+		"ds_YMfcDpNy": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region=\"US\" \n| rex field=Province_State \"(?<abbr_State>[A-Z]{2})\"\n| lookup abbr_state.csv abbr AS abbr_State OUTPUTNEW State AS State\n|stats sum(conf) as \"Confirmed Cases\" by State\n| geom geo_us_states featureIdField=State"
+			},
+			"name": "statesMap"
+		},
+		"ds_WDzrlKZe": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| stats sum(conf) as cases, sum(deaths) as deaths, sum(recoveries) as recoveries by Country_Region \n| search Country_Region=Australia \n| transpose \n| reverse \n| head 3 \n| rename column as status, \"row 1\" as count"
+			},
+			"name": "ausStatus"
+		},
+		"ds_mFurx7Gk": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| stats sum(recoveries) as recoveries by Country_Region\n| rename Country_Region as Country, recoveries as count|sort - count"
+			},
+			"name": "RecoveriesByCountry"
+		},
+		"ds_k5vcliHe": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| stats sum(deaths) as deaths by Country_Region|sort - deaths"
+			},
+			"name": "DeathsByCountry"
+		},
+		"ds_62Ur1ZnT": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n|lookup corona_id_lookup.csv id as id \n| stats sum(conf) as count, sum(deaths) as deaths, sum(recoveries) as recoveries by Country_Region \n| eval Country_Region=if(Country_Region=\"Mainland China\",\"China\",Country_Region) \n| eval Country_Region=if(Country_Region=\"US\",\"United States\",Country_Region) \n| eval Country_Region=if(Country_Region=\"UK\",\"United Kingdom\",Country_Region) \n| table Country_Region count \n| geom geo_countries featureIdField=\"Country_Region\" \n| sort - count"
+			},
+			"name": "MapCasesByCountry"
+		},
+		"ds_hWBNRB7j": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| stats sum(conf) as Cases by Country_Region|sort - Cases \n| rename Country_Region as Country"
+			},
+			"name": "CasesByCountryTable"
+		},
+		"ds_UAZzK4qM": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region!=Mainland* \n| stats sum(conf) as cases by Country_Region\n|sort - cases\n|head 15"
+			},
+			"name": "CasesOutsideChina"
+		},
+		"ds_xjieWPLf": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region=Mainland* \n| stats sum(conf) as cases by Province_State\n|sort - cases\n| head 10"
+			},
+			"name": "CasesWithinChina"
+		},
+		"ds_L1sx1GHN": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region=US \n| rex field=Province_State \"[\\w\\s\\,]+(?<code>\\w{2})\" \n| lookup us_region.csv Code as code \n| stats sum(conf) as conf by Region\n| search Region=West\n| table conf"
+			},
+			"name": "West"
+		},
+		"ds_p1r9icwV": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region=US \n| rex field=Province_State \"[\\w\\s\\,]+(?<code>\\w{2})\" \n| lookup us_region.csv Code as code \n| stats sum(conf) as conf by Region\n| search Region=Northeast\n| table conf"
+			},
+			"name": "Northeast"
+		},
+		"ds_xt01k12W": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region=US \n| rex field=Province_State \"[\\w\\s\\,]+(?<code>\\w{2})\" \n| lookup us_region.csv Code as code \n| stats sum(conf) as conf by Region|search Region=South|table conf"
+			},
+			"name": "South"
+		},
+		"ds_QeRtEl3M": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id \n| lookup corona_id_lookup.csv id as id \n| search Country_Region=US \n| rex field=Province_State \"[\\w\\s\\,]+(?<code>\\w{2})\" \n| lookup us_region.csv Code as code \n| stats sum(conf) as conf by Region|search Region=Midwest|table conf"
+			},
+			"name": "West"
+		},
+		"ds_e7al4sXu": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": "now"
+				},
+				"query": "|inputlookup confirmed.csv | fields * |  fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country \n| transpose 0 column_name=_time header_field=Country \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1\n| fields - _time\n| transpose\n| rename column as \"Country\", \"row 1\" as \"Total\" \n| sort 0 - Total\n| stats sum(Total) as Total"
+			},
+			"name": "TotalCases"
+		},
+		"ds_mmPemKFa": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": "now"
+				},
+				"query": "index=\"summary_epidemic\" \n| bin _time span=1d \n| stats latest(conf) as conf, latest(recoveries) as recoveries, latest(deaths) as deaths by id _time \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by _time|table _time recoveries"
+			},
+			"name": "TotalRecTrend"
+		},
+		"ds_8Bie7nk8": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": "now"
+				},
+				"query": "index=\"summary_epidemic\" \n| bin _time span=1d \n| stats latest(conf) as conf, latest(recoveries) as recoveries, latest(deaths) as deaths by id _time \n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by _time|table _time deaths"
+			},
+			"name": "TotalDeathTrend"
+		},
+		"ds_S0QQXZrH": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": "now"
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id \n|lookup corona_id_lookup.csv id as id \n| stats sum(conf) as count, sum(deaths) as deaths, sum(recoveries) as recoveries by Country_Region \n| eval Country_Region=if(Country_Region=\"Mainland China\",\"China\",Country_Region) \n| eval Country_Region=if(Country_Region=\"US\",\"United States\",Country_Region) \n| eval Country_Region=if(Country_Region=\"UK\",\"United Kingdom\",Country_Region) \n| table Country_Region count \n| geom geo_countries featureIdField=\"Country_Region\" \n| sort - count"
+			},
+			"name": "WorldChoropleth"
+		},
+		"ds_gaF79BTL": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": "now"
+				},
+				"query": "index=pandemic source=/four/opt/splunk/iot/splunk/etc/apps/crna/bin/crna_jhp.py \n| eval id='Lat'.'Long_' \n| stats latest(Confirmed) as conf, latest(Deaths) as deaths, latest(Recovered) as recoveries by id _time\n| stats sum(conf) as conf, sum(deaths) as deaths, sum(recoveries) as recoveries by id _time\n| stats sum(deaths) as \"deaths\" by _time"
+			},
+			"name": "AllDeathswithTrend"
+		},
+		"ds_URa3JoDI": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": "now"
+				},
+				"query": "| inputlookup recovered.csv \n| fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country \n| transpose 0 column_name=_time header_field=Country \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1\n| fields - _time\n| transpose\n| rename column as \"Country\", \"row 1\" as \"Total\" \n| sort 0 - Total\n| stats sum(Total) as Total"
+			},
+			"name": "TotalRecoveries"
+		},
+		"ds_gNUf7Hed": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": "now"
+				},
+				"query": "| inputlookup deaths.csv \n| fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country \n| transpose 0 column_name=_time header_field=Country \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1\n| fields - _time\n| transpose\n| rename column as \"Country\", \"row 1\" as \"Total\" \n| sort 0 - Total\n| stats sum(Total) as Total"
+			},
+			"name": "TotalDeaths"
+		},
+		"ds_DR7r9VJQ": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": "now"
+				},
+				"query": "| inputlookup confirmed.csv \n| fields - \"Province/State\" \n| rename \"Country/Region\" as Country \n| eval total_date_columns=1 \n| foreach *20 \n    [ eval total_date_columns=total_date_columns+1 ] \n| eval Country=Country+\"&&&&\"+Lat+\"&&&&\"+Long+\"&&&&\"+total_date_columns \n| stats sum(*) as * by Country \n| dedup Country \n| transpose 0 column_name=_time header_field=Country \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1 \n| fields - _time \n| transpose \n| rename column as \"Country\", \"row 1\" as \"Confirmed\" \n| sort 0 - Total \n| eval fields=split(Country,\"&&&&\") \n| eval Lat=mvindex(fields,1) \n| eval Long=mvindex(fields,2) \n| eval num_data_points=mvindex(fields,3) \n| eval Country=mvindex(fields,0) \n| fields - fields\n| appendcols \n    [| inputlookup deaths.csv \n    | fields - \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | search (Country=\"*\") \n    | eval Country=Country+\",\"+Lat+\",\"+Long \n    | stats sum(*) as * by Country \n    | dedup Country \n    | transpose 0 column_name=_time header_field=Country \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | sort 0 - _time \n    | head 1 \n    | fields - _time \n    | transpose \n    | rename column as \"Country\", \"row 1\" as \"Deaths\" \n    | sort 0 - Deaths \n    | eval fields=split(Country,\",\") \n    | eval Lat=mvindex(fields,1) \n    | eval Long=mvindex(fields,2) \n    | eval Country=mvindex(fields,0) \n    | fields - fields \n    | sort 0 + Country Lat Long] \n| appendcols \n    [| inputlookup recovered.csv \n    | fields - \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | search (Country=\"*\") \n    | eval Country=Country+\",\"+Lat+\",\"+Long \n    | stats sum(*) as * by Country \n    | dedup Country \n    | transpose 0 column_name=_time header_field=Country \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | sort 0 - _time \n    | head 1 \n    | fields - _time \n    | transpose \n    | rename column as \"Country\", \"row 1\" as \"Recovered\" \n    | sort 0 - Recovered \n    | eval fields=split(Country,\",\") \n    | eval Lat=mvindex(fields,1) \n    | eval Long=mvindex(fields,2) \n    | eval Country=mvindex(fields,0) \n    | fields - fields \n    | sort 0 + Country Lat Long] \n| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered max(# Confirmed/Day) as \"# Confirmed/Day\" max(num_data_points) as num_data_points by Country\n| eval \"# Confirmed/Day\" =round(Confirmed/num_data_points,0)\n| sort 0 - Confirmed\n|  fields Country Confirmed Deaths Recovered \"# Confirmed/Day\"\n"
+			},
+			"name": "Table"
+		},
+		"ds_Uxpiy3fW": {
+			"type": "ds.search",
+			"options": {
+				"query": "| inputlookup confirmed.csv \n| fields * \n| fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country\n| addtotals\n| sort 0 - Total\n| head 25\n| fields - Total\n| transpose 0 column_name=_time header_field=Country",
+				"queryParameters": {
+					"earliest": "0",
+					"latest": "now"
+				}
+			},
+			"name": "CasesOverTime"
+		},
+		"ds_O9hMRerL": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=_internal \n|  stats count"
+			},
+			"name": "Search_1"
+		},
+		"ds_IhOvuh5I": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": "now"
+				},
+				"query": "| inputlookup deaths.csv \n| fields - \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country\n| transpose 0 column_name=_time header_field=Country\n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1 \n| fields - _time\n| transpose \n| rename column as \"Country\", \"row 1\" as \"Deaths\"\n|  sort - Deaths\n| replace \"US\" with \"United States\" in Country\n| replace \"Korea, South\" with \"Korea, Republic of\" in Country\n|  replace \"Iran\" with \"Iran (Islamic Republic of)\" in Country\n|  replace \"Congo (Kinshasa)\" with \"Democratic Republic of the Congo\" in Country\n| replace \"Taiwan*\" with \"Taiwan\" in Country"
+			},
+			"name": "WorldMap_USE"
+		},
+		"ds_U9ffgRQL": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": "now"
+				},
+				"query": "| inputlookup deaths.csv \n| fields - \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country\n| transpose 0 column_name=_time header_field=Country\n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1 \n| fields - _time\n| transpose \n| rename column as \"Country\", \"row 1\" as \"Deaths\"\n| sort -Deaths"
+			},
+			"name": "WorldMap_Copy"
+		},
+		"ds_CnCRcp08": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=main sourcetype=git_update_corona _raw!=\"*Already up to date.*\" \n| head 1 \n| eval time=strftime(_time,\"%m/%d/%Y %H:%M:%S\") \n| table time\n|  eval time=time.\" PST\"",
+				"queryParameters": {
+					"earliest": "-7d@h",
+					"latest": "now"
+				}
+			},
+			"name": "Last JHU Data Update"
+		}
+	},
+	"inputs": {},
+	"layout": {
+		"type": "absolute",
+		"options": {
+			"backgroundColor": "#F5F5F5",
+			"width": 1800,
+			"height": 930,
+			"display": "auto-scale"
+		},
+		"structure": [
+			{
+				"item": "viz_n8ekjKfS",
+				"type": "block",
+				"position": {
+					"x": 20,
+					"y": 100,
+					"w": 380,
+					"h": 130
+				}
+			},
+			{
+				"item": "viz_CwPOaX3b",
+				"type": "block",
+				"position": {
+					"x": 1150,
+					"y": 20,
+					"w": 630,
+					"h": 430
+				}
+			},
+			{
+				"item": "viz_QqYMgs26",
+				"type": "block",
+				"position": {
+					"x": 1150,
+					"y": 420,
+					"w": 630,
+					"h": 50
+				}
+			},
+			{
+				"item": "viz_eIiNMRYY",
+				"type": "block",
+				"position": {
+					"x": 20,
+					"y": 380,
+					"w": 180,
+					"h": 90
+				}
+			},
+			{
+				"item": "viz_utwSiL6j",
+				"type": "block",
+				"position": {
+					"x": 220,
+					"y": 380,
+					"w": 180,
+					"h": 90
+				}
+			},
+			{
+				"item": "viz_5JkJ8CUx",
+				"type": "block",
+				"position": {
+					"x": 20,
+					"y": 240,
+					"w": 380,
+					"h": 120
+				}
+			},
+			{
+				"item": "viz_5n3AcTrS",
+				"type": "block",
+				"position": {
+					"x": 20,
+					"y": 10,
+					"w": 380,
+					"h": 70
+				}
+			},
+			{
+				"item": "viz_FJEV8EEa",
+				"type": "block",
+				"position": {
+					"x": 120,
+					"y": 270,
+					"w": 270,
+					"h": 80
+				}
+			},
+			{
+				"item": "viz_j38deXxt",
+				"type": "block",
+				"position": {
+					"x": 20,
+					"y": 235,
+					"w": 330,
+					"h": 50
+				}
+			},
+			{
+				"item": "viz_wtTBNmNq",
+				"type": "block",
+				"position": {
+					"x": 70,
+					"y": 420,
+					"w": 120,
+					"h": 40
+				}
+			},
+			{
+				"item": "viz_o3iQOFLX",
+				"type": "block",
+				"position": {
+					"x": 20,
+					"y": 375,
+					"w": 130,
+					"h": 50
+				}
+			},
+			{
+				"item": "viz_DH9k779T",
+				"type": "block",
+				"position": {
+					"x": 220,
+					"y": 380,
+					"w": 130,
+					"h": 50
+				}
+			},
+			{
+				"item": "viz_pcCilmMK",
+				"type": "block",
+				"position": {
+					"x": 290,
+					"y": 420,
+					"w": 90,
+					"h": 40
+				}
+			},
+			{
+				"item": "viz_1DbnnCNQ",
+				"type": "block",
+				"position": {
+					"x": 420,
+					"y": 20,
+					"w": 710,
+					"h": 450
+				}
+			},
+			{
+				"item": "viz_hjyEEOG9",
+				"type": "block",
+				"position": {
+					"x": 1150,
+					"y": 20,
+					"w": 630,
+					"h": 430
+				}
+			},
+			{
+				"item": "viz_xWfufymt",
+				"type": "block",
+				"position": {
+					"x": 1160,
+					"y": 20,
+					"w": 300,
+					"h": 50
+				}
+			},
+			{
+				"item": "viz_wPJAAPiI",
+				"type": "block",
+				"position": {
+					"x": 30,
+					"y": 420,
+					"w": 40,
+					"h": 40
+				}
+			},
+			{
+				"item": "viz_5hYhnSJV",
+				"type": "block",
+				"position": {
+					"x": 40,
+					"y": 280,
+					"w": 70,
+					"h": 70
+				}
+			},
+			{
+				"item": "viz_5lYBB7BZ",
+				"type": "block",
+				"position": {
+					"x": 30,
+					"y": 20,
+					"w": 360,
+					"h": 60
+				}
+			},
+			{
+				"item": "viz_pX3aDfZI",
+				"type": "block",
+				"position": {
+					"x": 230,
+					"y": 420,
+					"w": 40,
+					"h": 40
+				}
+			},
+			{
+				"item": "viz_XtPDZZ5y",
+				"type": "block",
+				"position": {
+					"x": 1520,
+					"y": 20,
+					"w": 250,
+					"h": 50
+				}
+			},
+			{
+				"item": "viz_DncdtjGz",
+				"type": "block",
+				"position": {
+					"x": 70,
+					"y": 150,
+					"w": 270,
+					"h": 50
+				}
+			},
+			{
+				"item": "viz_77uORneX",
+				"type": "block",
+				"position": {
+					"x": 20,
+					"y": 480,
+					"w": 570,
+					"h": 400
+				}
+			},
+			{
+				"item": "viz_Vrh5chUX",
+				"type": "block",
+				"position": {
+					"x": 610,
+					"y": 480,
+					"w": 1170,
+					"h": 400
+				}
+			},
+			{
+				"item": "viz_b3Ib1UAx",
+				"type": "block",
+				"position": {
+					"x": 20,
+					"y": 875,
+					"w": 1760,
+					"h": 50
+				}
+			},
+			{
+				"item": "viz_QP32VmYn",
+				"type": "block",
+				"position": {
+					"x": 100,
+					"y": 190,
+					"w": 200,
+					"h": 40
+				}
+			},
+			{
+				"item": "viz_cKN7XOAT",
+				"type": "block",
+				"position": {
+					"x": 50,
+					"y": 90,
+					"w": 300,
+					"h": 40
+				}
+			},
+			{
+				"item": "viz_RqU59rBG",
+				"type": "block",
+				"position": {
+					"x": 50,
+					"y": 135,
+					"w": 300,
+					"h": 50
+				}
+			},
+			{
+				"item": "viz_lWTLPyji",
+				"type": "block",
+				"position": {
+					"x": 120,
+					"y": 175,
+					"w": 160,
+					"h": 30
+				}
+			}
+		]
+	},
+	"description": "",
+	"title": "Coronavirus (COVID-19)"
 }
