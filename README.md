@@ -2,8 +2,7 @@
 
 This is a set of dashboards for analyzing the Corona Virus using Splunk. 
 
-Repository Manager: Ryan O'Connor
-Contributors to this app: Miranda Luna, Ryan O'Connor, Caleb Dyck, Anthony Barbato, Giovanni Mola
+Contributors to this app: Ryan O'Connor, Miranda Luna, Caleb Dyck, Anthony Barbato, Giovanni Mola
 
 ## Installing the App
 
