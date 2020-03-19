@@ -28,6 +28,8 @@ There are three dashboards here:
 
 1. Coronavirus 
     1. This is a static analysis of the Coronavirus. 
+1. covid-19 Patterns & Trends
+    1. This is the same dashboard as the one publicly available on https://covid-19.splunkforgood.com 
 1. Coronavirus - Timelapse
     1. This is a timelapse of the Coronavirus from the first day it was detected, until the current day. 
 1. Confirmed Cases/Locations Overlay
