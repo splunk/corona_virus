@@ -28,8 +28,6 @@ This will ensure the required submodule is cloned into the correct directory ins
 
 ## Dashboard Information
 
-There are three dashboards here:
-
 1. Coronavirus 
     1. This is a static analysis of the Coronavirus. 
 1. covid-19 Patterns & Trends
