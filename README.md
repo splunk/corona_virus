@@ -24,7 +24,7 @@ This package depends on a submodule from here: https://github.com/CSSEGISandData
 
 `git clone --recurse-submodules https://github.com/splunk/corona_virus.git`
 
-This will ensure the required submodule is cloned into the correct directory inside of the app. 
+This will ensure the required submodule is cloned into the correct directory inside of the app. Once you have cloned the app, please restart Splunk. 
 
 ## Dashboard Information
 
