@@ -4,7 +4,9 @@ This is a set of dashboards for analyzing the Corona Virus using Splunk. Created
 
 ## Installing the App
 
-This app should be installed directly into $SPLUNK_HOME/etc/apps. You simply clone the app directly into that directory and it will be self-contained. Please see the install instructions below. You must use the git clone method for this app to stay up to date. 
+This app should be installed directly into $SPLUNK_HOME/etc/apps. You simply clone the app directly into that directory and it will be self-contained. Please see the install instructions below. 
+
+**You must use the git clone method for this app to work properly**
 
 ### App Requirements
 
@@ -37,7 +39,7 @@ There are three dashboards here:
     
 ## Lookup Table Updating
 
-There is a scripted input inside of this app that can be enabled. It can be found in the GUI by going to Settings > Data Inputs > Scripts and enabling the input "update_git.sh". 
+There is a scripted input inside of this app that is **enabled by default**. It can be found in the GUI by going to Settings > Data Inputs > Scripts and enabling the input "update_git.sh". 
 
 This scripted input will send it's output by default to `index=main sourcetype=git_update_corona`. You can use this index/sourcetype to find out when the latest update to the Coronavirus git repository took place. 
 
