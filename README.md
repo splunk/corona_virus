@@ -1,6 +1,9 @@
 # Coronavirus App
 
-This is a set of dashboards for analyzing the Corona Virus using Splunk. Created by Ryan O'Connor. 
+This is a set of dashboards for analyzing the Corona Virus using Splunk. 
+
+Repository Manager: Ryan O'Connor
+Contributors to this app: Miranda Luna, Ryan O'Connor, Caleb Dyck, Anthony Barbato, Giovanni Mola
 
 ## Installing the App
 
@@ -10,11 +13,11 @@ This app should be installed directly into $SPLUNK_HOME/etc/apps. You simply clo
 
 ### App Requirements
 
-This app currently is supported on Linux only. 
+* This app currently is supported on Linux only. 
 
-For all dashboards to load optimally, please ensure you have the [Maps+ App installed from Splunkbase](https://splunkbase.splunk.com/app/3124/). 
+* For the Confirmed Cases/Locations Overlay dashboard to load optimally, please ensure you have the [Maps+ App installed from Splunkbase](https://splunkbase.splunk.com/app/3124/). 
 
-Please also ensure you are installing using the git clone method below. 
+* Please also ensure you are installing using the git clone method below. 
 
 ### Specific Requirements for Cloning the Directory.
 
