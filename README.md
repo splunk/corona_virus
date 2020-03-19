@@ -8,7 +8,7 @@ Contributors to this app: Ryan O'Connor, Miranda Luna, Caleb Dyck, Anthony Barba
 
 This app should be installed directly into $SPLUNK_HOME/etc/apps. You simply clone the app directly into that directory and it will be self-contained. Please see the install instructions below. 
 
-**You must use the git clone method for this app to work properly**
+**You must use the git clone method for this app to work properly. See [Cloning this App](#cloning-this-app)**
 
 ### App Requirements
 
@@ -18,9 +18,9 @@ This app should be installed directly into $SPLUNK_HOME/etc/apps. You simply clo
 
 * Please also ensure you are installing using the git clone method below. 
 
-### Specific Requirements for Cloning the Directory.
+### Cloning this App
 
-This package depends on a submodule from here: https://github.com/CSSEGISandData/COVID-19 which is the main source of data for the Coronavirus. As a result, when you run git clone, please add the --recurse-submodules parameter after the clone. So for example:
+This package depends on a submodule from here: https://github.com/CSSEGISandData/COVID-19 which is the main source of data for the Coronavirus. As a result, when you run git [clone](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository), please add the --recurse-submodules parameter after the clone. So for example:
 
 `git clone --recurse-submodules https://github.com/splunk/corona_virus.git`
 
