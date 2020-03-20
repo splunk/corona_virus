@@ -4,7 +4,7 @@ This is a set of dashboards for analyzing the Corona Virus using Splunk.
 
 Contributors to this app: Ryan O'Connor, Miranda Luna, Caleb Dyck, Anthony Barbato, Giovanni Mola
 
-The Splunk Corona Virus dashboard provided in this GitHub repo is an informational tool provided by Splunk without charge to all those who are working to understand and combat COVID-19.  The dashboard is intended for informational purposes only and relies entirely on data provided by various third-parties including, inter alia, Johns Hopkins University and any information entered by the user. [https://github.com/CSSEGISandData/COVID-19](https://github.com/CSSEGISandData/COVID-19). This dashboard is not for commercial use and is intended and should be used to provide background and context on the evolving COVID-19 situation.  Splunk disclaims any and all representations and warranties with respect to the dashboard, including accuracy, fitness for use and merchantability.
+<em>The Splunk Corona Virus dashboard provided in this GitHub repo is an informational tool provided by Splunk without charge to all those who are working to understand and combat COVID-19.  The dashboard is intended for informational purposes only and relies entirely on data provided by various third-parties including, inter alia, Johns Hopkins University and any information entered by the user. [https://github.com/CSSEGISandData/COVID-19](https://github.com/CSSEGISandData/COVID-19). This dashboard is not for commercial use and is intended and should be used to provide background and context on the evolving COVID-19 situation.  Splunk disclaims any and all representations and warranties with respect to the dashboard, including accuracy, fitness for use and merchantability.</em>
 
 ## Installing the App
 
