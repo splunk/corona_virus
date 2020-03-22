@@ -336,6 +336,7 @@
 | eval "# Confirmed/Day" =round(Confirmed/num_data_points,0)
 | sort 0 - Confirmed
 |  fields Country Confirmed Deaths Recovered "# Confirmed/Day"
+| eval Recovered=case(Country="US" AND Recovered&lt;171, 171, 1=1, Recovered)
 | search $country$</query>
         </search>
         <option name="dataOverlayMode">none</option>
