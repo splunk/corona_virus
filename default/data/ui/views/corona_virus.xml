@@ -148,6 +148,7 @@
 | fields - _time 
 | transpose 
 | rename column as "Country", "row 1" as "Total" 
+| eval Total=case(Country="US" AND Total&lt;171, 171, 1=1, Total)
 | sort 0 - Total 
 | stats sum(Total) as Total</query>
         </search>
