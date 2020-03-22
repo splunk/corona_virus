@@ -195,7 +195,8 @@
 					"field": "primary.Deaths",
 					"format": {
 						"type": "rangevalue",
-						"ranges": [{
+						"ranges": [
+							{
 								"from": 3000,
 								"value": "#4665D6"
 							},
@@ -289,13 +290,15 @@
 				"fontSize": 12,
 				"textColor": "#0877a6"
 			},
-			"eventHandlers": [{
-				"type": "drilldown.customUrl",
-				"options": {
-					"url": "https://github.com/CSSEGISandData/COVID-19",
-					"newTab": true
+			"eventHandlers": [
+				{
+					"type": "drilldown.customUrl",
+					"options": {
+						"url": "https://github.com/CSSEGISandData/COVID-19",
+						"newTab": true
+					}
 				}
-			}]
+			]
 		},
 		"viz_RqU59rBG": {
 			"type": "viz.text",
@@ -564,7 +567,7 @@
 					"earliest": "0",
 					"latest": "now"
 				},
-				"query": "| inputlookup confirmed.csv \n| fields - \"Province/State\" \n| rename \"Country/Region\" as Country \n| eval total_date_columns=1 \n| foreach *20 \n    [ eval total_date_columns=total_date_columns+1 ] \n| eval Country=Country+\"&&&&\"+Lat+\"&&&&\"+Long+\"&&&&\"+total_date_columns \n| stats sum(*) as * by Country \n| dedup Country \n| transpose 0 column_name=_time header_field=Country \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1 \n| fields - _time \n| transpose \n| rename column as \"Country\", \"row 1\" as \"Confirmed\" \n| sort 0 - Total \n| eval fields=split(Country,\"&&&&\") \n| eval Lat=mvindex(fields,1) \n| eval Long=mvindex(fields,2) \n| eval num_data_points=mvindex(fields,3) \n| eval Country=mvindex(fields,0) \n| fields - fields\n| appendcols \n    [| inputlookup deaths.csv \n    | fields - \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | search (Country=\"*\") \n    | eval Country=Country+\",\"+Lat+\",\"+Long \n    | stats sum(*) as * by Country \n    | dedup Country \n    | transpose 0 column_name=_time header_field=Country \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | sort 0 - _time \n    | head 1 \n    | fields - _time \n    | transpose \n    | rename column as \"Country\", \"row 1\" as \"Deaths\" \n    | sort 0 - Deaths \n    | eval fields=split(Country,\",\") \n    | eval Lat=mvindex(fields,1) \n    | eval Long=mvindex(fields,2) \n    | eval Country=mvindex(fields,0) \n    | fields - fields \n    | sort 0 + Country Lat Long] \n| appendcols \n    [| inputlookup recovered.csv \n    | fields - \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | search (Country=\"*\") \n    | eval Country=Country+\",\"+Lat+\",\"+Long \n    | stats sum(*) as * by Country \n    | dedup Country \n    | transpose 0 column_name=_time header_field=Country \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | sort 0 - _time \n    | head 1 \n    | fields - _time \n    | transpose \n    | rename column as \"Country\", \"row 1\" as \"Recovered\" \n    | sort 0 - Recovered \n    | eval fields=split(Country,\",\") \n    | eval Lat=mvindex(fields,1) \n    | eval Long=mvindex(fields,2) \n    | eval Country=mvindex(fields,0) \n    | fields - fields \n    | sort 0 + Country Lat Long] \n| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered max(# Confirmed/Day) as \"# Confirmed/Day\" max(num_data_points) as num_data_points by Country\n| eval \"# Confirmed/Day\" =round(Confirmed/num_data_points,0)\n| sort 0 - Confirmed\n|  fields Country Confirmed Deaths Recovered \"# Confirmed/Day\"\n"
+				"query": "| inputlookup confirmed.csv \n| fields - \"Province/State\" \n| rename \"Country/Region\" as Country \n| eval total_date_columns=1 \n| foreach *20 \n    [ eval total_date_columns=total_date_columns+1 ] \n| eval Country=Country+\"&&&&\"+Lat+\"&&&&\"+Long+\"&&&&\"+total_date_columns \n| stats sum(*) as * by Country \n| dedup Country \n| transpose 0 column_name=_time header_field=Country \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1 \n| fields - _time \n| transpose \n| rename column as \"Country\", \"row 1\" as \"Confirmed\" \n| sort 0 - Total \n| eval fields=split(Country,\"&&&&\") \n| eval Lat=mvindex(fields,1) \n| eval Long=mvindex(fields,2) \n| eval num_data_points=mvindex(fields,3) \n| eval Country=mvindex(fields,0) \n| fields - fields\n| appendcols \n    [| inputlookup deaths.csv \n    | fields - \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | search (Country=\"*\") \n    | eval Country=Country+\",\"+Lat+\",\"+Long \n    | stats sum(*) as * by Country \n    | dedup Country \n    | transpose 0 column_name=_time header_field=Country \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | sort 0 - _time \n    | head 1 \n    | fields - _time \n    | transpose \n    | rename column as \"Country\", \"row 1\" as \"Deaths\" \n    | sort 0 - Deaths \n    | eval fields=split(Country,\",\") \n    | eval Lat=mvindex(fields,1) \n    | eval Long=mvindex(fields,2) \n    | eval Country=mvindex(fields,0) \n    | fields - fields \n    | sort 0 + Country Lat Long] \n| appendcols \n    [| inputlookup recovered.csv \n    | fields - \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | search (Country=\"*\") \n    | eval Country=Country+\",\"+Lat+\",\"+Long \n    | stats sum(*) as * by Country \n    | dedup Country \n    | transpose 0 column_name=_time header_field=Country \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | sort 0 - _time \n    | head 1 \n    | fields - _time \n    | transpose \n    | rename column as \"Country\", \"row 1\" as \"Recovered\" \n    | sort 0 - Recovered \n    | eval fields=split(Country,\",\") \n    | eval Lat=mvindex(fields,1) \n    | eval Long=mvindex(fields,2) \n    | eval Country=mvindex(fields,0) \n    | fields - fields \n    | sort 0 + Country Lat Long] \n| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered max(# Confirmed/Day) as \"# Confirmed/Day\" max(num_data_points) as num_data_points by Country\n| eval \"# Confirmed/Day\" =round(Confirmed/num_data_points,0)\n| sort 0 - Confirmed\n|  fields Country Confirmed Deaths Recovered \"# Confirmed/Day\"\n|  eval Recovered=case(Country==\"US\" AND Recovered<171, 171, 1=1, Recovered)"
 			},
 			"name": "Table"
 		},
@@ -629,7 +632,8 @@
 			"height": 930,
 			"display": "auto-scale"
 		},
-		"structure": [{
+		"structure": [
+			{
 				"item": "viz_n8ekjKfS",
 				"type": "block",
 				"position": {
@@ -885,7 +889,7 @@
 				"position": {
 					"x": 100,
 					"y": 190,
-					"w": 200,
+					"w": 220,
 					"h": 40
 				}
 			},
