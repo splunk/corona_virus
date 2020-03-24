@@ -67,6 +67,8 @@ Fast-forward
  3 files changed, 801 insertions(+), 822 deletions(-)
  ```
 ## Change Record
+### 3/24/20
+* Added a scripted input to take the latest daily report from JHU and symlink it to a lookup table called update_daily.csv
 ### 3/23/20
 * Updated app to conform to changes in the JHU Data Repository. See the [following link](https://github.com/CSSEGISandData/COVID-19/issues/1250) for more information
 * Major callout in this update is the removal of Recovered data with the hopes of more granular county level insights coming soon. 
