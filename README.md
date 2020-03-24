@@ -67,6 +67,9 @@ Fast-forward
  3 files changed, 801 insertions(+), 822 deletions(-)
  ```
 ## Change Record
+### 3/23/20
+* Updated app to conform to changes in the JHU Data Repository. See the [following link](https://github.com/CSSEGISandData/COVID-19/issues/1250) for more information
+* Major callout in this update is the removal of Recovered data with the hopes of more granular county level insights coming soon. 
 ### 3/19/20
 * Merged in the public Splunk Dashboards Beta into the app. So people downloading this app can look at both Simple XML Dashboards, as well as the new dashboards beta dashboard.
 * Fixed a couple bugs to make the main Simple XML Dashboard Mobile Friendly
