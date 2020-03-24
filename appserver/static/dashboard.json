@@ -12,12 +12,6 @@
 				"src": "/static/app/corona_virus/images/confirmed.svg"
 			}
 		},
-		"viz_wPJAAPiI": {
-			"type": "viz.img",
-			"options": {
-				"src": "/static/app/corona_virus/images/recovered.svg"
-			}
-		},
 		"viz_pX3aDfZI": {
 			"type": "viz.img",
 			"options": {
@@ -38,17 +32,6 @@
 			},
 			"dataSources": {
 				"primary": "ds_gNUf7Hed"
-			},
-			"title": ""
-		},
-		"viz_wtTBNmNq": {
-			"type": "viz.singlevalue",
-			"options": {
-				"backgroundColor": "transparent",
-				"showSparkline": false
-			},
-			"dataSources": {
-				"primary": "ds_URa3JoDI"
 			},
 			"title": ""
 		},
@@ -121,20 +104,6 @@
 			"options": {
 				"fill": "#ffffff",
 				"stroke": "transparent"
-			}
-		},
-		"viz_eIiNMRYY": {
-			"type": "viz.rectangle",
-			"options": {
-				"fill": "#ffffff",
-				"stroke": "transparent"
-			}
-		},
-		"viz_o3iQOFLX": {
-			"type": "viz.text",
-			"options": {
-				"content": "Total Recoveries",
-				"fontSize": 14
 			}
 		},
 		"viz_DH9k779T": {
@@ -567,7 +536,7 @@
 					"earliest": "0",
 					"latest": "now"
 				},
-				"query": "| inputlookup confirmed.csv \n| fields - \"Province/State\" \n| rename \"Country/Region\" as Country \n| eval total_date_columns=1 \n| foreach *20 \n    [ eval total_date_columns=total_date_columns+1 ] \n| eval Country=Country+\"&&&&\"+Lat+\"&&&&\"+Long+\"&&&&\"+total_date_columns \n| stats sum(*) as * by Country \n| dedup Country \n| transpose 0 column_name=_time header_field=Country \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 1 \n| fields - _time \n| transpose \n| rename column as \"Country\", \"row 1\" as \"Confirmed\" \n| sort 0 - Total \n| eval fields=split(Country,\"&&&&\") \n| eval Lat=mvindex(fields,1) \n| eval Long=mvindex(fields,2) \n| eval num_data_points=mvindex(fields,3) \n| eval Country=mvindex(fields,0) \n| fields - fields\n| appendcols \n    [| inputlookup deaths.csv \n    | fields - \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | search (Country=\"*\") \n    | eval Country=Country+\",\"+Lat+\",\"+Long \n    | stats sum(*) as * by Country \n    | dedup Country \n    | transpose 0 column_name=_time header_field=Country \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | sort 0 - _time \n    | head 1 \n    | fields - _time \n    | transpose \n    | rename column as \"Country\", \"row 1\" as \"Deaths\" \n    | sort 0 - Deaths \n    | eval fields=split(Country,\",\") \n    | eval Lat=mvindex(fields,1) \n    | eval Long=mvindex(fields,2) \n    | eval Country=mvindex(fields,0) \n    | fields - fields \n    | sort 0 + Country Lat Long] \n| appendcols \n    [| inputlookup recovered.csv \n    | fields - \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | search (Country=\"*\") \n    | eval Country=Country+\",\"+Lat+\",\"+Long \n    | stats sum(*) as * by Country \n    | dedup Country \n    | transpose 0 column_name=_time header_field=Country \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | sort 0 - _time \n    | head 1 \n    | fields - _time \n    | transpose \n    | rename column as \"Country\", \"row 1\" as \"Recovered\" \n    | sort 0 - Recovered \n    | eval fields=split(Country,\",\") \n    | eval Lat=mvindex(fields,1) \n    | eval Long=mvindex(fields,2) \n    | eval Country=mvindex(fields,0) \n    | fields - fields \n    | sort 0 + Country Lat Long] \n| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered max(# Confirmed/Day) as \"# Confirmed/Day\" max(num_data_points) as num_data_points by Country\n| eval \"# Confirmed/Day\" =round(Confirmed/num_data_points,0)\n| sort 0 - Confirmed\n|  fields Country Confirmed Deaths Recovered \"# Confirmed/Day\"\n|  eval Recovered=case(Country==\"US\" AND Recovered<171, 171, 1=1, Recovered)"
+				"query": "| inputlookup confirmed.csv \n| fields * \n| fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| search (Country=\"*\") \n| stats sum(*) as * by Country \n| dedup Country \n| addtotals \n| sort 0 - Total \n| fields - Total \n| transpose 0 column_name=_time header_field=Country \n| eval _time=strptime(_time,\"%m/%d/%y\") \n| sort 0 - _time \n| head 2 \n| sort 0 + _time \n| transpose 0 column_name=_time header_field=Country \n| rename _time as Country \n| search Country!=\"_time\" AND Country!=*diff* \n| rename \"row 1\" as first \n| rename \"row 2\" as second \n| eval perc_incr=round(((second-first)/first)*100,2).\"%\"\n| fields Country second perc_incr \n| rename \"second\" as \"Confirmed\" \n| rename \"perc_incr\" as \"Daily Infection Rate\" \n| sort 0 + Country \n| appendcols \n    [| inputlookup deaths.csv \n    | fields - \"Province/State\" \n    | rename \"Country/Region\" as Country \n    | search (Country=\"*\") \n    | eval Country=Country \n    | stats sum(*) as * by Country \n    | dedup Country \n    | transpose 0 column_name=_time header_field=Country \n    | eval _time=strptime(_time,\"%m/%d/%y\") \n    | sort 0 - _time \n    | head 1 \n    | fields - _time \n    | transpose \n    | rename column as \"Country\", \"row 1\" as \"Deaths\" \n    | sort 0 - Deaths \n    | eval fields=split(Country,\",\") \n    | eval Lat=mvindex(fields,1) \n    | eval Long=mvindex(fields,2) \n    | eval Country=mvindex(fields,0) \n    | fields - fields \n    | sort 0 + Country \n    | fields - Lat Long] \n| sort 0 - Confirmed \n| fields Country Confirmed Deaths \"Daily Infection Rate\""
 			},
 			"name": "Table"
 		},
@@ -664,22 +633,12 @@
 				}
 			},
 			{
-				"item": "viz_eIiNMRYY",
+				"item": "viz_utwSiL6j",
 				"type": "block",
 				"position": {
 					"x": 20,
 					"y": 380,
-					"w": 180,
-					"h": 90
-				}
-			},
-			{
-				"item": "viz_utwSiL6j",
-				"type": "block",
-				"position": {
-					"x": 220,
-					"y": 380,
-					"w": 180,
+					"w": 380,
 					"h": 90
 				}
 			},
@@ -724,43 +683,13 @@
 				}
 			},
 			{
-				"item": "viz_wtTBNmNq",
-				"type": "block",
-				"position": {
-					"x": 70,
-					"y": 420,
-					"w": 120,
-					"h": 40
-				}
-			},
-			{
-				"item": "viz_o3iQOFLX",
-				"type": "block",
-				"position": {
-					"x": 20,
-					"y": 375,
-					"w": 130,
-					"h": 50
-				}
-			},
-			{
 				"item": "viz_DH9k779T",
 				"type": "block",
 				"position": {
-					"x": 220,
+					"x": 30,
 					"y": 380,
 					"w": 130,
 					"h": 50
-				}
-			},
-			{
-				"item": "viz_pcCilmMK",
-				"type": "block",
-				"position": {
-					"x": 290,
-					"y": 420,
-					"w": 90,
-					"h": 40
 				}
 			},
 			{
@@ -794,16 +723,6 @@
 				}
 			},
 			{
-				"item": "viz_wPJAAPiI",
-				"type": "block",
-				"position": {
-					"x": 30,
-					"y": 420,
-					"w": 40,
-					"h": 40
-				}
-			},
-			{
 				"item": "viz_5hYhnSJV",
 				"type": "block",
 				"position": {
@@ -827,7 +746,7 @@
 				"item": "viz_pX3aDfZI",
 				"type": "block",
 				"position": {
-					"x": 230,
+					"x": 50,
 					"y": 420,
 					"w": 40,
 					"h": 40
@@ -921,6 +840,16 @@
 					"y": 175,
 					"w": 160,
 					"h": 30
+				}
+			},
+			{
+				"item": "viz_pcCilmMK",
+				"type": "block",
+				"position": {
+					"x": 120,
+					"y": 400,
+					"w": 270,
+					"h": 60
 				}
 			}
 		]
