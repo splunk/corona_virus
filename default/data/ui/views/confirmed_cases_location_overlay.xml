@@ -41,41 +41,24 @@
     <panel>
       <viz type="leaflet_maps_app.maps-plus">
         <search>
-          <query>| inputlookup confirmed.csv
-| fields - "Province/State" 
-| rename "Country/Region" as Country 
-| eval Country=Country+"&amp;&amp;&amp;&amp;"+Lat+"&amp;&amp;&amp;&amp;"+Long 
-| stats sum(*) as * by Country 
-| dedup Country
-| transpose 0 column_name=_time header_field=Country 
-| eval _time=strptime(_time,"%m/%d/%y") 
-| sort 0 - _time 
-| head 1 
-| fields - _time 
-| transpose 
-| rename column as "Country", "row 1" as "Confirmed" 
-| sort 0 - Total 
-| eval fields=split(Country,"&amp;&amp;&amp;&amp;") 
-| eval Lat=mvindex(fields,1) 
-| eval Long=mvindex(fields,2) 
-| eval Country=mvindex(fields,0) 
-| fields - fields 
-| sort 0 + Country Lat Long 
-| rename Lat as latitude, Long as longitude 
-| fields latitude longitude Confirmed Country 
+          <query>| inputlookup combined_jhu.csv 
+| eval time=strptime(_time,"%m-%d-%y")
+| eventstats max(time) as latest_t
+| where time=latest_t
+| fillnull value=""
 | search $country$
-| rename Confirmed as circleRadius, Country as title 
-| eval title=title." - ".circleRadius
-| eval markerType="circle" 
-| eval circleColor="red" 
-| eventstats min(circleRadius) as min max(circleRadius) as max 
-| eval circleRadius = ((circleRadius-min)/max-min)*100 
+| rename Latitude as latitude, Longitude as longitude
+| eval tooltip="&lt;b&gt;".Country."-".State."-".County.": ".Confirmed."&lt;/b&gt;"
+| eval markerType="circle"
+| eval circleRadius=case(Confirmed &gt; 50000, 50, Confirmed &gt; 15000, 30, Confirmed &gt; 1000, 20, Confirmed &gt; 500, 15, Confirmed &gt; 100, 5, 1=1, 2)
+| eval circleFillOpacity=case(Confirmed &gt; 50000, 0.6, Confirmed &gt; 15000, 0.5, Confirmed &gt; 1000, 0.45, Confirmed &gt; 500, 0.4, Confirmed &gt; 100, 0.35, 1=1, 0.3)
+| eval circleFillColor=case(Confirmed &gt; 50000, "red", Confirmed &gt; 15000, "orange", Confirmed &gt; 1000, "yellow", Confirmed &gt; 500, "magenta", Confirmed &gt; 100, "cyan", 1=1, "green")
+| eval circleWeight=0
 | append 
     [| inputlookup locations.csv 
     | rename lat as latitude, lon as longitude 
     | eval markerType="png" 
-    | eval title=description] 
-| fields - address geolocation</query>
+    | eval title=description]</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -112,7 +95,7 @@
         <option name="leaflet_maps_app.maps-plus.mapCenterLat">39.50</option>
         <option name="leaflet_maps_app.maps-plus.mapCenterLon">-98.35</option>
         <option name="leaflet_maps_app.maps-plus.mapCenterZoom">6</option>
-        <option name="leaflet_maps_app.maps-plus.mapTile">http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png</option>
+        <option name="leaflet_maps_app.maps-plus.mapTile">http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png</option>
         <option name="leaflet_maps_app.maps-plus.maxClusterRadius">80</option>
         <option name="leaflet_maps_app.maps-plus.maxSpiderfySize">100</option>
         <option name="leaflet_maps_app.maps-plus.maxZoom">19</option>
