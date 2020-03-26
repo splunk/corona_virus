@@ -71,6 +71,8 @@ Fast-forward
 
 I've added a script that you can utilize to merge all of the daily reports into one massive csv file. This can be used to get State Level data again. I will try and keep this file up to date inside of the git repository for everyone. 
 
+This script does require pandas, which does not ship with Splunk today. But you can run the script via cron on a Linux machine to keep the file up to date. 
+
 ```
 * * * * * SPLUNK_HOME="/opt/splunk" /usr/bin/python /opt/splunk/etc/apps/corona_virus/bin/merge.py
 ```
