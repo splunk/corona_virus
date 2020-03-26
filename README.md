@@ -67,6 +67,10 @@ Fast-forward
  3 files changed, 801 insertions(+), 822 deletions(-)
  ```
 ## Change Record
+
+### 3/26/20
+* Added a python script called "merge.py" which you can use to merge all of the Daily reports into one massive csv file. This allows for US State level Data once again. 
+* Tried to correct some of the renames of the files that JHU made this week so the symbolic links should be up to date.
 ### 3/24/20
 * Added a scripted input to take the latest daily report from JHU and symlink it to a lookup table called update_daily.csv
 ### 3/23/20
