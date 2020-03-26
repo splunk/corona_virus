@@ -122,8 +122,14 @@
 				"axisTitleY.text": "Number of Cases (linear scale)",
 				"axisTitleX.visibility": "collapsed"
 			},
+			"encoding": {
+				"annotationColor": "annotation[2]",
+				"annotationLabel": "annotation[1]",
+				"annotationX": "annotation[0]"
+			},
 			"dataSources": {
-				"primary": "ds_Uxpiy3fW"
+				"primary": "ds_Uxpiy3fW",
+				"annotation": "annotation_world"
 			},
 			"title": "Top 25 Countries with Reported Cases (Over Time)"
 		},
@@ -309,6 +315,17 @@
 		}
 	},
 	"dataSources": {
+		"annotation_world": {
+			"type": "ds.search",
+			"options": {
+				"queryParameters": {
+					"earliest": "0",
+					"latest": ""
+				},
+				"query": "| inputlookup covid19events.csv \n| search world_usa IN (world, both) \n| eval _time=strptime(date,\"%m/%d/%Y\") \n| table _time annotation_label annotation_color \n| eval annotation_color = coalesce(annotation_color, \"#505158\")"
+			},
+			"name": "AnnotationsWorld"
+		},
 		"ds_DS4CmivD": {
 			"type": "ds.search",
 			"options": {
