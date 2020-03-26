@@ -31,6 +31,7 @@ This will ensure the required submodule is cloned into the correct directory ins
 ## Dashboard Information
 
 1. Coronavirus 
+    ![image](https://user-images.githubusercontent.com/11879871/77706120-dd31e180-6f97-11ea-96e0-89d1a2182896.png)
     1. This is a static analysis of the Coronavirus. 
 1. covid-19 Patterns & Trends
     1. This is the same dashboard as the one publicly available on https://covid-19.splunkforgood.com 
