@@ -66,6 +66,14 @@ Fast-forward
  .../time_series_19-covid-Recovered.csv             | 541 ++++++++++-----------
  3 files changed, 801 insertions(+), 822 deletions(-)
  ```
+ 
+## US State Level Data & Daily Reports
+
+I've added a script that you can utilize to merge all of the daily reports into one massive csv file. This can be used to get State Level data again. I will try and keep this file up to date inside of the git repository for everyone. 
+
+```
+* * * * * SPLUNK_HOME="/opt/splunk" /usr/bin/python /opt/splunk/etc/apps/corona_virus/bin/merge.py
+```
 ## Change Record
 
 ### 3/26/20
