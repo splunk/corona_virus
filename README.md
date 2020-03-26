@@ -86,6 +86,7 @@ This script does require pandas, which does not ship with Splunk today. But you 
 * Added a python script called "merge.py" which you can use to merge all of the Daily reports into one massive csv file. This allows for US State level Data once again. 
 * Going to be keeping a lookup table called combined_jhu.csv up to date for people to use. This will be a combination of whatever daily csse reports that are posted publicly.
 * Tried to correct some of the renames of the files that JHU made this week so the symbolic links should be up to date.
+* Updated Dashboards Beta to contain annotations on Area Chart
 ### 3/24/20
 * Added a scripted input to take the latest daily report from JHU and symlink it to a lookup table called update_daily.csv
 ### 3/23/20
