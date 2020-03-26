@@ -69,7 +69,9 @@ Fast-forward
  
 ## US State Level Data & Daily Reports
 
-I've added a script that you can utilize to merge all of the daily reports into one massive csv file. This can be used to get State Level data again. I will try and keep this file up to date inside of the git repository for everyone. 
+I've added a script that you can utilize to merge all of the daily reports into one massive csv file. This can be used to get State Level data again. I will keep this file up to date as often as JHU provides daily reports. It is a lookup table called combined_jhu.csv. If you'd like to update it on your own, I am providing more details below. 
+
+### To Update combined_jhu.csv on your own
 
 This script does require pandas, which does not ship with Splunk today. But you can run the script via cron on a Linux machine to keep the file up to date. 
 
@@ -80,6 +82,7 @@ This script does require pandas, which does not ship with Splunk today. But you 
 
 ### 3/26/20
 * Added a python script called "merge.py" which you can use to merge all of the Daily reports into one massive csv file. This allows for US State level Data once again. 
+* Going to be keeping a lookup table called combined_jhu.csv up to date for people to use. This will be a combination of whatever daily csse reports that are posted publicly.
 * Tried to correct some of the renames of the files that JHU made this week so the symbolic links should be up to date.
 ### 3/24/20
 * Added a scripted input to take the latest daily report from JHU and symlink it to a lookup table called update_daily.csv
