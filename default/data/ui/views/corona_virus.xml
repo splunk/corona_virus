@@ -4,6 +4,8 @@
     <query>|inputlookup confirmed.csv | fields *</query>
     <earliest>-24h@h</earliest>
     <latest>now</latest>
+    <refresh>10m</refresh>
+    <refreshType>delay</refreshType>
   </search>
   <description>This data is sourced from https://github.com/CSSEGISandData/COVID-19. Expect updates to the data about once per day.</description>
   <fieldset submitButton="false">
@@ -124,6 +126,31 @@
 | rename column as "Country", "row 1" as "Total" 
 | sort 0 - Total 
 | stats sum(Total) as Total</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Recovered</title>
+      <single>
+        <search>
+          <query>| inputlookup recovered.csv 
+| fields - Lat Long "Province/State" 
+| rename "Country/Region" as Country 
+| stats sum(*) as * by Country 
+| dedup Country 
+| search $country$ 
+| transpose 0 column_name=_time header_field=Country 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| sort 0 - _time 
+| head 1 
+| fields - _time 
+| transpose 
+| rename column as "Country", "row 1" as "Total" 
+| eval Total=case(Country="US" AND Total&lt;171, 171, 1=1, Total)
+| sort 0 - Total 
+| stats sum(Total) as Total</query>
           <earliest>$earliest$</earliest>
           <latest>$latest$</latest>
         </search>
@@ -206,6 +233,7 @@
     | geostats latfield=Lat longfield=Long  sum(Confirmed) sum(Recovered) sum(Deaths)  by Country globallimit=0
 | rename "sum(*" as *
 | rename *)* as **</query>
+          <sampleRatio>1</sampleRatio>
         </search>
         <option name="drilldown">none</option>
         <option name="mapping.choroplethLayer.colorBins">5</option>
@@ -241,35 +269,34 @@
       <title>Total Cases by Country</title>
       <table>
         <search base="base">
-          <query>| fields - Lat Long "Province/State" 
+          <query>| fields - "Province/State" 
 | rename "Country/Region" as Country 
-    | search $country$
+| eval total_date_columns=1 
+| foreach *20 
+    [ eval total_date_columns=total_date_columns+1 ] 
+| eval Country=Country+"&amp;&amp;&amp;&amp;"+Lat+"&amp;&amp;&amp;&amp;"+Long+"&amp;&amp;&amp;&amp;"+total_date_columns 
 | stats sum(*) as * by Country 
 | dedup Country 
-| addtotals 
-| sort 0 - Total 
-| fields - Total 
 | transpose 0 column_name=_time header_field=Country 
 | eval _time=strptime(_time,"%m/%d/%y") 
 | sort 0 - _time 
-| head 2 
-| sort 0 + _time 
-| transpose 0 column_name=_time header_field=Country 
-| rename _time as Country 
-| search Country!="_time" AND Country!=*diff* 
-| rename "row 1" as first 
-| rename "row 2" as second 
-| eval perc_incr=round(((second-first)/first)*100,2)."%"
-| fields Country second perc_incr 
-| rename "second" as "Confirmed" 
-| rename "perc_incr" as "Daily Infection Rate" 
-| sort 0 + Country 
+| head 1 
+| fields - _time 
+| transpose 
+| rename column as "Country", "row 1" as "Confirmed" 
+| sort 0 - Total 
+| eval fields=split(Country,"&amp;&amp;&amp;&amp;") 
+| eval Lat=mvindex(fields,1) 
+| eval Long=mvindex(fields,2) 
+| eval num_data_points=mvindex(fields,3) 
+| eval Country=mvindex(fields,0) 
+| fields - fields
 | appendcols 
     [| inputlookup deaths.csv 
     | fields - "Province/State" 
     | rename "Country/Region" as Country 
-    | search $country$
-    | eval Country=Country 
+    | search (Country="*") 
+    | eval Country=Country+","+Lat+","+Long 
     | stats sum(*) as * by Country 
     | dedup Country 
     | transpose 0 column_name=_time header_field=Country 
@@ -285,10 +312,35 @@
     | eval Long=mvindex(fields,2) 
     | eval Country=mvindex(fields,0) 
     | fields - fields 
-    | sort 0 + Country 
-    | fields - Lat Long] 
-| sort 0 - Confirmed 
-| fields Country Confirmed Deaths "Daily Infection Rate"</query>
+    | sort 0 + Country Lat Long] 
+| appendcols 
+    [| inputlookup recovered.csv 
+    | fields - "Province/State" 
+    | rename "Country/Region" as Country 
+    | search (Country="*") 
+    | eval Country=Country+","+Lat+","+Long 
+    | stats sum(*) as * by Country 
+    | dedup Country 
+    | transpose 0 column_name=_time header_field=Country 
+    | eval _time=strptime(_time,"%m/%d/%y") 
+    | sort 0 - _time 
+    | head 1 
+    | fields - _time 
+    | transpose 
+    | rename column as "Country", "row 1" as "Recovered" 
+    | sort 0 - Recovered 
+    | eval fields=split(Country,",") 
+    | eval Lat=mvindex(fields,1) 
+    | eval Long=mvindex(fields,2) 
+    | eval Country=mvindex(fields,0) 
+    | fields - fields 
+    | sort 0 + Country Lat Long] 
+| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered max(# Confirmed/Day) as "# Confirmed/Day" max(num_data_points) as num_data_points by Country
+| eval "# Confirmed/Day" =round(Confirmed/num_data_points,0)
+| sort 0 - Confirmed
+|  fields Country Confirmed Deaths Recovered "# Confirmed/Day"
+| eval Recovered=case(Country="US" AND Recovered&lt;171, 171, 1=1, Recovered)
+| search $country$</query>
         </search>
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">none</option>
@@ -313,7 +365,11 @@
 | head 25
 | fields - Total
 | transpose 0 column_name=_time header_field=Country
-| eval _time=strptime(_time,"%m/%d/%y")</query>
+| eval time=strptime(_time,"%m/%d/%y")
+| eval _time=strftime(time,"%Y-%m-%dT%H:%M:%S.%Q")
+| fields - time</query>
+          <refresh>10m</refresh>
+          <refreshType>delay</refreshType>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -455,13 +511,18 @@
 | streamstats sum(trend) as "Average Cases (All-Time)" 
 | fields - trend 
 | rename "Total" as "Total Cases" 
-| eval "Overall Infection Rate"='Total Cases'/num 
+| eval "Overall Infection Rate"=round('Total Cases'/num,2)
 | fields - num "Average Cases (All-Time)"
 | eventstats max("Overall Infection Rate") as "Maximum Infection Rate"
 | rename "Total Cases" as "TotalCases"
 | streamstats current=f window=2 last(TotalCases) as last
 | rename TotalCases as "Total Cases"
-| fields - last</query>
+| fields - last
+| eval time=_time
+| eval _time=strftime(time,"%Y-%m-%dT%H:%M:%S.%Q")
+| fields - time</query>
+          <refresh>10m</refresh>
+          <refreshType>delay</refreshType>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -521,10 +582,15 @@
 | rename "Total" as "Total Cases" 
 | rename "Total Cases" as "TotalCases" 
 | streamstats current=f window=2 last(TotalCases) as last 
-| eval perc_incr=((TotalCases-last)/last)*100 
+| eval perc_incr=round(((TotalCases-last)/last)*100, 2)
 | rename TotalCases as "Total Cases", perc_incr as "Daily Infection Rate" 
 | fields - last 
-| fields _time "Total Cases"  "Daily Infection Rate"</query>
+| fields _time "Total Cases"  "Daily Infection Rate"
+| eval time=_time
+| eval _time=strftime(time,"%Y-%m-%dT%H:%M:%S.%Q")
+| fields - time</query>
+          <refresh>10m</refresh>
+          <refreshType>delay</refreshType>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
