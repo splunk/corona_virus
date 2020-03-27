@@ -52,7 +52,9 @@
 | eval markerType="circle"
 | eval circleRadius=case(Confirmed &gt; 50000, 50, Confirmed &gt; 15000, 30, Confirmed &gt; 1000, 20, Confirmed &gt; 500, 15, Confirmed &gt; 100, 5, 1=1, 2)
 | eval circleFillOpacity=case(Confirmed &gt; 50000, 0.6, Confirmed &gt; 15000, 0.5, Confirmed &gt; 1000, 0.45, Confirmed &gt; 500, 0.4, Confirmed &gt; 100, 0.35, 1=1, 0.3)
-| eval circleFillColor=case(Confirmed &gt; 50000, "red", Confirmed &gt; 15000, "orange", Confirmed &gt; 1000, "yellow", Confirmed &gt; 500, "magenta", Confirmed &gt; 100, "cyan", 1=1, "green")
+| eval circleFillColor="#6484F6"
+| eval layerGroup=case(Confirmed &gt; 50000, "red", Confirmed &gt; 15000, "orange", Confirmed &gt; 1000, "yellow", Confirmed &gt; 500, "magenta", Confirmed &gt; 100, "cyan", 1=1, "green")
+| eval layerDescription=case(Confirmed &gt; 50000, "&gt;50000", Confirmed &gt; 15000, "&gt;15000", Confirmed &gt; 1000, "&gt;1000", Confirmed &gt; 500, "&gt;500", Confirmed &gt; 100, "&gt;100", 1=1, "&lt;100")
 | eval circleWeight=0
 | append 
     [| inputlookup locations.csv 
