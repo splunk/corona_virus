@@ -44,7 +44,9 @@ This will ensure the required submodule is cloned into the correct directory ins
     
 ## Lookup Table Updating
 
-There is a scripted input inside of this app that is **enabled by default**. It can be found in the GUI by going to Settings > Data Inputs > Scripts and enabling the input "update_git.sh". 
+### confirmed.csv, recovered.csv, and deaths.csv
+
+There is a scripted input inside of this app that is **enabled by default**. It can be found in the GUI by going to Settings > Data Inputs > Scripts and enabling the input "update_git.sh". This script will be used to pull the latest csse timeseries data from JHU and create a symbolic link to each file in the $SPLUNK_HOME/etc/apps/corona_virus/lookups directory. 
 
 This scripted input will send it's output by default to `index=main sourcetype=git_update_corona`. You can use this index/sourcetype to find out when the latest update to the Coronavirus git repository took place. 
 
@@ -70,19 +72,50 @@ Fast-forward
  3 files changed, 801 insertions(+), 822 deletions(-)
  ```
  
-## US State Level Data & Daily Reports
+## combined_jhu.csv
 
-I've added a script that you can utilize to merge all of the daily reports into one massive csv file. This can be used to get State Level data again. I will keep this file up to date as often as JHU provides daily reports. It is a lookup table called combined_jhu.csv. If you'd like to update it on your own, I am providing more details below. 
+This file contains US State Level Data, County Level Data, and is a combination of all previous CSSE Daily Reports. 
+
+I've added a script that I use to merge all of the daily reports into one massive csv file. This can be used to get historical State Level time series data once again. I will keep this file up to date as often as JHU provides daily reports. It is a lookup table called combined_jhu.csv. If you'd like to update it on your own or explore the methodology I use to merge, I am providing more details below. 
+
+
+#### Background of this file
+As mentioned in the documentation:
+
+"This package depends on a submodule from here: https://github.com/CSSEGISandData/COVID-19 which is the main source of data for the Coronavirus."
+
+### Methodology for creating combined_jhu.csv
+
+Our merge.py file simply takes the daily reports provided from the aforementioned Github repository (specifically the CSSE Daily Reports), and appends all of them onto one another. The only adjustment going on, is standardizing on field names. For example: in some files we have "Province/State" and in others we have "Province/State". This adjustment of field names allows us to search commonly for "Country" Across all dates as far back as JHU provides daily reports. I also add a column called "file_name" so you can determine which file the record came from. 
+
+This methodology creates a massive CSV with all of the following fields:
+
+-         "Latitude"
+-         "Longitude"
+-         "Country"
+-         "State"
+-         "Deaths"
+-         "Confirmed"
+-         "Recovered"
+-         "County"
+-         "FIPS"
+-         "file_name"
+
+_Note: Not all of these fields are filled out for all daily reports. For example, County level data only started coming in very recently. Those fields will be blank for some files._ 
 
 ### To Update combined_jhu.csv on your own
 
-This script does require pandas, which does not ship with Splunk today. But you can run the script via cron on a Linux machine to keep the file up to date. 
+This script does require pandas, which does not ship with Splunk today. But you can run the script via cron on a Linux machine to keep the file up to date. Please note that the daily reports only come in once per day, and I will be updating this file once per day. **so you don't need to do this part**. But for the sake of being open about our process, I've provided the information below. 
 
 ```
 * * * * * SPLUNK_HOME="/opt/splunk" /usr/bin/python /opt/splunk/etc/apps/corona_virus/bin/merge.py
 ```
 ## Change Record
 
+### 3/27/20
+* Updated combined_jhu.csv with the latest daily reports. 
+* Fixed the map overlay dashboard with some fancy new colors. SPL help courtesy of Scott Haskell. 
+* Updated README to provide more information. 
 ### 3/26/20
 * Added a python script called "merge.py" which you can use to merge all of the Daily reports into one massive csv file. This allows for US State level Data once again. 
 * Going to be keeping a lookup table called combined_jhu.csv up to date for people to use. This will be a combination of whatever daily csse reports that are posted publicly.
