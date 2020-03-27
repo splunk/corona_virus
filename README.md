@@ -79,12 +79,12 @@ This file contains US State Level Data, County Level Data, and is a combination 
 I've added a script that I use to merge all of the daily reports into one massive csv file. This can be used to get historical State Level time series data once again. I will keep this file up to date as often as JHU provides daily reports. It is a lookup table called combined_jhu.csv. If you'd like to update it on your own or explore the methodology I use to merge, I am providing more details below. 
 
 
-#### Background of this file
+##### Background of this file
 As mentioned in the documentation:
 
 "This package depends on a submodule from here: https://github.com/CSSEGISandData/COVID-19 which is the main source of data for the Coronavirus."
 
-### Methodology for creating combined_jhu.csv
+#### Methodology for creating combined_jhu.csv
 
 Our merge.py file simply takes the daily reports provided from the aforementioned Github repository (specifically the CSSE Daily Reports), and appends all of them onto one another. The only adjustment going on, is standardizing on field names. For example: in some files we have "Province/State" and in others we have "Province/State". This adjustment of field names allows us to search commonly for "Country" Across all dates as far back as JHU provides daily reports. I also add a column called "file_name" so you can determine which file the record came from. 
 
