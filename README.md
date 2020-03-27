@@ -72,7 +72,7 @@ Fast-forward
  3 files changed, 801 insertions(+), 822 deletions(-)
  ```
  
-## combined_jhu.csv
+### combined_jhu.csv
 
 This file contains US State Level Data, County Level Data, and is a combination of all previous CSSE Daily Reports. 
 
