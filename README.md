@@ -116,6 +116,7 @@ This script does require pandas, which does not ship with Splunk today. But you 
 * Updated combined_jhu.csv with the latest daily reports. 
 * Fixed the map overlay dashboard with some fancy new colors. SPL help courtesy of Scott Haskell. 
 * Updated README to provide more information. 
+* Modified main dashboard to use ISO8601 Timestamps in all timeseries charts
 ### 3/26/20
 * Added a python script called "merge.py" which you can use to merge all of the Daily reports into one massive csv file. This allows for US State level Data once again. 
 * Going to be keeping a lookup table called combined_jhu.csv up to date for people to use. This will be a combination of whatever daily csse reports that are posted publicly.
