@@ -421,12 +421,9 @@
 | stats sum(*) as * by Country 
 | dedup Country 
 | search $country$
-| addtotals 
-| sort 0 - Total 
-| head 25 
-| fields - Total 
-| untable Country _time count 
-| eval _time=strptime(_time,"%m/%d/%y") 
+| untable Country _time count
+| eval time=case(_time="Confirmed", strftime(now(),"%m/%d/%y"), 1=1, strftime(strptime(_time,"%m/%d/%y"),"%m/%d/%y")) 
+| eval _time=strptime(time,"%m/%d/%y") 
 | eval starttime="01012020" 
 | eval time2=strptime(starttime,"%m%d%Y") 
 | eval days=floor(((_time+86400)-time2)/86400) 
@@ -437,15 +434,24 @@
     | rename "Country/Region" as Country 
     | stats sum(*) as * by Country 
     | dedup Country 
+| search $country$
     | untable Country _time count 
     | eval _time=strptime(_time,"%m/%d/%y") 
     | eval starttime="01012020" 
     | eval time2=strptime(starttime,"%m%d%Y") 
     | eval days=floor(((_time+86400)-time2)/86400) 
-    | table Country days count 
+    | table Country _time days count 
     | rename count as death_count
         ] 
-| fields Country days count death_count</query>
+| fields Country days count death_count
+| eventstats max(count) as max by Country
+| sort 0 - max
+| streamstats dc(max)  as rank current=t
+| where rank&lt;25
+| fields Country days count death_count
+| sort 0 + Country days</query>
+          <refresh>10m</refresh>
+          <refreshType>delay</refreshType>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -457,7 +463,7 @@
         <option name="charting.axisX.abbreviation">none</option>
         <option name="charting.axisX.scale">linear</option>
         <option name="charting.axisY.abbreviation">none</option>
-        <option name="charting.axisY.scale">log</option>
+        <option name="charting.axisY.scale">linear</option>
         <option name="charting.axisY2.abbreviation">none</option>
         <option name="charting.axisY2.enabled">0</option>
         <option name="charting.axisY2.scale">inherit</option>
