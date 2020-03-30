@@ -161,7 +161,7 @@
   </row>
   <row>
     <panel>
-      <title>Corona Virus Cases</title>
+      <title>Cases by Country</title>
       <map>
         <search base="base">
           <query> | fields * |  fields - "Province/State" 
@@ -352,29 +352,24 @@
       </table>
     </panel>
     <panel>
-      <title>Top 25 Countries with Reported Cases (Over Time)</title>
+      <title>Top 25 Countries with Confirmed Cases (Over Time)</title>
       <chart>
         <search base="base">
           <query>| fields - Lat Long "Province/State" 
 | rename "Country/Region" as Country 
-| search $country$ 
-| search Country!="Diamond*" AND Country!="*Princess*" 
+| search $country$
 | stats sum(*) as * by Country 
 | dedup Country 
+| addtotals 
+| sort 0 - Total 
+| head 25 
+| fields - Total 
 | transpose 0 column_name=_time header_field=Country 
-| eval time=strptime(_time,"%m/%d/%y") 
-| eval _time=strftime(time,"%Y-%m-%dT%H:%M:%S.%Q") 
-| fields - time 
-| untable _time Country count 
-| eventstats max(count) as max by Country 
-| sort 0 - max 
-| streamstats dc(max) as rank current=t 
-| where rank&lt;25 
-| replace "Korea, South" with "SouthKorea" in Country 
-| replace "United Kingdom" with "UK" in Country 
-| search Country!="Diamond*" AND Country!="*Princess*" 
-| fields - max rank 
-| xyseries _time Country count 
+| eval _time=strptime(_time,"%m/%d/%y") 
+| eval _time=strftime(_time,"%m/%d/%y") 
+| untable _time Country count
+| sort 0 - count
+| xyseries _time Country count
 | fillnull value=0</query>
           <refresh>10m</refresh>
           <refreshType>delay</refreshType>
@@ -418,7 +413,7 @@
   </row>
   <row>
     <panel>
-      <title>Top 25 Countries with Confirmed Cases (By Day Since January 01, 2020) - Colored By Country, Size of Bubble by Death Count</title>
+      <title>Top 25 Countries with Confirmed Cases (By Day Since January 01, 2020)</title>
       <chart>
         <search base="base">
           <query>| fields - Lat Long "Province/State" 
