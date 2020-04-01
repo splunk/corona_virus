@@ -112,6 +112,9 @@ This script does require pandas, which does not ship with Splunk today. But you 
 ```
 ## Change Record
 
+### 3/30/20
+* Updated combined_jhu.csv with the latest daily reports. 
+
 ### 3/29/20
 * Updated combined_jhu.csv with the latest daily reports. 
 * Formatted some of the main dashboard panels to work in the timelapse dashboard. Some of them include a bubble chart and also an updated table. 
