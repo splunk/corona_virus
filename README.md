@@ -112,6 +112,15 @@ This script does require pandas, which does not ship with Splunk today. But you 
 ```
 ## Change Record
 
+### 04/03/20
+* Updated combined_jhu.csv
+
+### 04/02/20
+* Updated combined_jhu.csv
+
+### 04/01/20
+* Updated combined_jhu.csv
+
 ### 3/30/20
 * Updated combined_jhu.csv with the latest daily reports. 
 
