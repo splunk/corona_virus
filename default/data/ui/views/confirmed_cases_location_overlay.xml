@@ -41,7 +41,7 @@
     <panel>
       <viz type="leaflet_maps_app.maps-plus">
         <search>
-          <query>| inputlookup combined_jhu.csv 
+          <query>| inputlookup combined_jhu.csv  WHERE Longitude=* AND Latitude=*
 | eval time=strptime(_time,"%m-%d-%y")
 | eventstats max(time) as latest_t
 | where time=latest_t
