@@ -268,79 +268,23 @@
     <panel>
       <title>Total Cases by Country</title>
       <table>
-        <search base="base">
-          <query>| fields - "Province/State" 
-| rename "Country/Region" as Country 
-| eval total_date_columns=1 
-| foreach *20 
-    [ eval total_date_columns=total_date_columns+1 ] 
-| eval Country=Country+"&amp;&amp;&amp;&amp;"+Lat+"&amp;&amp;&amp;&amp;"+Long+"&amp;&amp;&amp;&amp;"+total_date_columns 
-| stats sum(*) as * by Country 
-| dedup Country 
-| transpose 0 column_name=_time header_field=Country 
-| eval _time=strptime(_time,"%m/%d/%y") 
-| sort 0 - _time 
-| head 1 
-| fields - _time 
-| transpose 
-| rename column as "Country", "row 1" as "Confirmed" 
-| sort 0 - Total 
-| eval fields=split(Country,"&amp;&amp;&amp;&amp;") 
-| eval Lat=mvindex(fields,1) 
-| eval Long=mvindex(fields,2) 
-| eval num_data_points=mvindex(fields,3) 
-| eval Country=mvindex(fields,0) 
-| fields - fields
-| appendcols 
-    [| inputlookup deaths.csv 
-    | fields - "Province/State" 
-    | rename "Country/Region" as Country 
-    | search (Country="*") 
-    | eval Country=Country+","+Lat+","+Long 
-    | stats sum(*) as * by Country 
-    | dedup Country 
-    | transpose 0 column_name=_time header_field=Country 
-    | eval _time=strptime(_time,"%m/%d/%y") 
-    | sort 0 - _time 
-    | head 1 
-    | fields - _time 
-    | transpose 
-    | rename column as "Country", "row 1" as "Deaths" 
-    | sort 0 - Deaths 
-    | eval fields=split(Country,",") 
-    | eval Lat=mvindex(fields,1) 
-    | eval Long=mvindex(fields,2) 
-    | eval Country=mvindex(fields,0) 
-    | fields - fields 
-    | sort 0 + Country Lat Long] 
-| appendcols 
-    [| inputlookup recovered.csv 
-    | fields - "Province/State" 
-    | rename "Country/Region" as Country 
-    | search (Country="*") 
-    | eval Country=Country+","+Lat+","+Long 
-    | stats sum(*) as * by Country 
-    | dedup Country 
-    | transpose 0 column_name=_time header_field=Country 
-    | eval _time=strptime(_time,"%m/%d/%y") 
-    | sort 0 - _time 
-    | head 1 
-    | fields - _time 
-    | transpose 
-    | rename column as "Country", "row 1" as "Recovered" 
-    | sort 0 - Recovered 
-    | eval fields=split(Country,",") 
-    | eval Lat=mvindex(fields,1) 
-    | eval Long=mvindex(fields,2) 
-    | eval Country=mvindex(fields,0) 
-    | fields - fields 
-    | sort 0 + Country Lat Long] 
-| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered max(# Confirmed/Day) as "# Confirmed/Day" max(num_data_points) as num_data_points by Country
-| eval "# Confirmed/Day" =round(Confirmed/num_data_points,0)
-| sort 0 - Confirmed
-|  fields Country Confirmed Deaths Recovered "# Confirmed/Day"
-| eval Recovered=case(Country="US" AND Recovered&lt;171, 171, 1=1, Recovered)
-| search $country$</query>
+        <search>
+          <query>| inputlookup combined_jhu.csv WHERE $country$
+| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered by Country _time 
+| sort 0 + Country _time 
+| streamstats last(Confirmed) as last_Confirmed window=2 current=f by Country 
+| eval GrowthRate=round(((Confirmed-last_Confirmed)/last_Confirmed)*100,2) 
+| fields - last_Confirmed 
+| sort 0 - _time Confirmed Country 
+| eval time=_time
+| eventstats max(time) as max_time
+| where max_time=time
+| fields - _time max_time time
+| rename "GrowthRate" as "% Growth Rate"</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+          <refresh>10m</refresh>
+          <refreshType>delay</refreshType>
         </search>
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">none</option>
