@@ -97,7 +97,7 @@
         <option name="leaflet_maps_app.maps-plus.mapCenterLat">39.50</option>
         <option name="leaflet_maps_app.maps-plus.mapCenterLon">-98.35</option>
         <option name="leaflet_maps_app.maps-plus.mapCenterZoom">6</option>
-        <option name="leaflet_maps_app.maps-plus.mapTile">http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png</option>
+        <option name="leaflet_maps_app.maps-plus.mapTile">//{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png</option>
         <option name="leaflet_maps_app.maps-plus.maxClusterRadius">80</option>
         <option name="leaflet_maps_app.maps-plus.maxSpiderfySize">100</option>
         <option name="leaflet_maps_app.maps-plus.maxZoom">19</option>
