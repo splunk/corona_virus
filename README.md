@@ -112,6 +112,11 @@ This script does require pandas, which does not ship with Splunk today. But you 
 ```
 ## Change Record
 
+### 04/04/20
+* Updated combined_jhu.csv
+* Resolved issue with table on main app. Ended up cutting over to using my combined_jhu.csv which is a much easier format to work with. 
+* resolved issue #16
+
 ### 04/03/20
 * Updated combined_jhu.csv
 
