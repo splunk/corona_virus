@@ -1,5 +1,10 @@
 <form theme="dark" stylesheet="dashboard.css">
   <label>Coronavirus</label>
+  <search id="jhu">
+    <query>| savedsearch "Datapreperation JHU Lookups"</query>
+    <refresh>10m</refresh>
+    <refreshType>delay</refreshType>
+  </search>
   <search id="base">
     <query>|inputlookup confirmed.csv | fields *</query>
     <earliest>-24h@h</earliest>
@@ -13,25 +18,8 @@
       <label>Country</label>
       <fieldForLabel>Country</fieldForLabel>
       <fieldForValue>Country</fieldForValue>
-      <search base="base">
-        <query> 
-| fields - "Province/State" 
-| rename "Country/Region" as Country 
-| eval Country=Country+","+Lat+","+Long 
-| stats sum(*) as * by Country 
-| dedup Country 
-| transpose 0 column_name=_time header_field=Country 
-| eval _time=strptime(_time,"%m/%d/%y") 
-| sort 0 - _time 
-| head 1 
-| fields - _time 
-| transpose 
-| rename column as "Country", "row 1" as "Confirmed" 
-| sort 0 - Total 
-| eval fields=split(Country,",") 
-| eval Lat=mvindex(fields,1) 
-| eval Long=mvindex(fields,2) 
-| eval Country=mvindex(fields,0) | table Country | dedup Country</query>
+      <search base="jhu">
+        <query>| stats values(Country) as Country | mvexpand Country</query>
       </search>
       <prefix>(</prefix>
       <suffix>)</suffix>
@@ -47,19 +35,11 @@
     <panel>
       <title>Last Update</title>
       <single>
-        <search base="base">
-          <query> |  fields - Lat Long "Province/State" 
-| rename "Country/Region" as Country 
-| stats sum(*) as * by Country 
-| dedup Country 
-| transpose 0 column_name=_time header_field=Country 
-| eval _time=strptime(_time,"%m/%d/%y") 
-| sort 0 - _time 
-| head 1
-| fields + _time
-| eval date = _time
-| eval date=strftime(date,"%m/%d/%y")
-| fields date</query>
+        <search base="jhu">
+          <query>| stats max(_time) as _time | eval date=strftime(_time,"%m/%d/%y")</query>
+          <done>
+            <set token="last_update">$result.date$</set>
+          </done>
         </search>
         <option name="colorBy">value</option>
         <option name="colorMode">none</option>
@@ -76,7 +56,35 @@
         <option name="trellis.size">medium</option>
         <option name="trendColorInterpretation">standard</option>
         <option name="trendDisplayMode">absolute</option>
-        <option name="unitPosition">after</option>
+        <option name="unit">&#128197;</option>
+        <option name="unitPosition">before</option>
+        <option name="useColors">0</option>
+        <option name="useThousandSeparators">1</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Countries</title>
+      <single>
+        <search base="jhu">
+          <query>| stats dc(Country)</query>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="height">115</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x53a051", "0x0877a6", "0xf8be34", "0xf1813f", "0xdc4e41"]</option>
+        <option name="rangeValues">[0,30,70,100]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="unit">&#127758;</option>
+        <option name="unitPosition">before</option>
         <option name="useColors">0</option>
         <option name="useThousandSeparators">1</option>
       </single>
