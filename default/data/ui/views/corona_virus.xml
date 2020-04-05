@@ -169,23 +169,16 @@
     <panel>
       <title>Total Cases by Country</title>
       <table>
-        <search>
-          <query>| inputlookup combined_jhu.csv WHERE $country$
-| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered by Country _time 
-| sort 0 + Country _time 
-| streamstats last(Confirmed) as last_Confirmed window=2 current=f by Country 
-| eval GrowthRate=round(((Confirmed-last_Confirmed)/last_Confirmed)*100,2) 
-| fields - last_Confirmed 
-| sort 0 - _time Confirmed Country 
-| eval time=_time
-| eventstats max(time) as max_time
-| where max_time=time
-| fields - _time max_time time
-| rename "GrowthRate" as "% Growth Rate"</query>
-          <earliest>$earliest$</earliest>
-          <latest>$latest$</latest>
-          <refresh>10m</refresh>
-          <refreshType>delay</refreshType>
+        <search base="jhu_filtered">
+          <query>| eventstats max(_time) as max_time 
+| where _time&gt;=relative_time(max_time, "-1d")
+
+| stats latest(Confirmed) as Confirmed latest(Active) as Active latest(Deaths) as Deaths latest(Recovered) as Recovered earliest(Confirmed) as confirmedPreviousDay latest(_time) as _time by Country Province Lat Long
+| eval "New Confirmed" = Confirmed - confirmedPreviousDay
+
+| stats sum(Confirmed) as "Total Confirmed Cases" sum("New Confirmed") as "(New Today ↗)" sum(Active) as "Active Infections" sum(Deaths) as Deaths sum(Recovered) as Recovered by Country
+
+| sort 0 - "Total Confirmed Cases"</query>
         </search>
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">none</option>
@@ -197,27 +190,22 @@
       </table>
     </panel>
     <panel>
-      <title>Top 25 Countries with Confirmed Cases (Over Time)</title>
+      <title>$metric_1_name$ by Country (Over Time)</title>
+      <input type="dropdown" token="metric_1">
+        <label>Metric</label>
+        <choice value="Confirmed">Total Confirmed Cases</choice>
+        <choice value="Active">Active Infections</choice>
+        <choice value="Deaths">Deaths</choice>
+        <choice value="Recovered">Recovered</choice>
+        <default>Confirmed</default>
+        <initialValue>Confirmed</initialValue>
+        <change>
+          <set token="metric_1_name">$label$</set>
+        </change>
+      </input>
       <chart>
-        <search base="base">
-          <query>| fields - Lat Long "Province/State" 
-| rename "Country/Region" as Country 
-| search $country$
-| stats sum(*) as * by Country 
-| dedup Country 
-| addtotals 
-| sort 0 - Total 
-| head 25 
-| fields - Total 
-| transpose 0 column_name=_time header_field=Country 
-| eval _time=strptime(_time,"%m/%d/%y") 
-| eval _time=strftime(_time,"%m/%d/%y") 
-| untable _time Country count
-| sort 0 - count
-| xyseries _time Country count
-| fillnull value=0</query>
-          <refresh>10m</refresh>
-          <refreshType>delay</refreshType>
+        <search base="jhu_filtered">
+          <query>| timechart span=1d sum($metric_1$) by Country</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
