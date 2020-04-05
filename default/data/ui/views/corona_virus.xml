@@ -1,9 +1,15 @@
 <form theme="dark" stylesheet="dashboard.css">
   <label>Coronavirus</label>
+  <init>
+    <set token="last_update">...</set>
+  </init>
   <search id="jhu">
     <query>| savedsearch "Datapreperation JHU Lookups"</query>
     <refresh>10m</refresh>
     <refreshType>delay</refreshType>
+  </search>
+  <search id="jhu_filtered" base="jhu">
+    <query>| search $country$</query>
   </search>
   <search id="base">
     <query>|inputlookup confirmed.csv | fields *</query>
@@ -92,78 +98,31 @@
   </row>
   <row>
     <panel>
-      <title>Confirmed Cases</title>
+      <title>Number of cases on $last_update$ compared to previous day</title>
       <single>
-        <search base="base">
-          <query>
-| fields - Lat Long "Province/State" 
-| rename "Country/Region" as Country 
-| stats sum(*) as * by Country 
-| dedup Country 
-| search $country$ 
-| transpose 0 column_name=_time header_field=Country 
-| eval _time=strptime(_time,"%m/%d/%y") 
-| sort 0 - _time 
-| head 1 
-| fields - _time 
-| transpose 
-| rename column as "Country", "row 1" as "Total" 
-| sort 0 - Total 
-| stats sum(Total) as Total</query>
+        <title>Total Confirmed Cases = Active Infections + Deaths + Recovered</title>
+        <search base="jhu_filtered">
+          <query>| timechart span=1d sum(Confirmed) as "Total Confirmed Cases" sum(Active) as "Active Infections" sum(Deaths) as Deaths sum(Recovered) as Recovered</query>
         </search>
+        <option name="colorBy">trend</option>
+        <option name="colorMode">block</option>
         <option name="drilldown">none</option>
+        <option name="height">245</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x53a051","0x0877a6","0xf8be34","0xf1813f","0xdc4e41"]</option>
+        <option name="rangeValues">[0,30,70,100]</option>
         <option name="refresh.display">progressbar</option>
-      </single>
-    </panel>
-    <panel>
-      <title>Deaths</title>
-      <single>
-        <search>
-          <query>| inputlookup deaths.csv 
-| fields - Lat Long "Province/State" 
-| rename "Country/Region" as Country 
-| stats sum(*) as * by Country 
-| dedup Country 
-| search $country$ 
-| transpose 0 column_name=_time header_field=Country 
-| eval _time=strptime(_time,"%m/%d/%y") 
-| sort 0 - _time 
-| head 1 
-| fields - _time 
-| transpose 
-| rename column as "Country", "row 1" as "Total" 
-| sort 0 - Total 
-| stats sum(Total) as Total</query>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </single>
-    </panel>
-    <panel>
-      <title>Recovered</title>
-      <single>
-        <search>
-          <query>| inputlookup recovered.csv 
-| fields - Lat Long "Province/State" 
-| rename "Country/Region" as Country 
-| stats sum(*) as * by Country 
-| dedup Country 
-| search $country$ 
-| transpose 0 column_name=_time header_field=Country 
-| eval _time=strptime(_time,"%m/%d/%y") 
-| sort 0 - _time 
-| head 1 
-| fields - _time 
-| transpose 
-| rename column as "Country", "row 1" as "Total" 
-| eval Total=case(Country="US" AND Total&lt;171, 171, 1=1, Total)
-| sort 0 - Total 
-| stats sum(Total) as Total</query>
-          <earliest>$earliest$</earliest>
-          <latest>$latest$</latest>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trellis.enabled">1</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">large</option>
+        <option name="trendColorInterpretation">inverse</option>
+        <option name="trendDisplayMode">percent</option>
+        <option name="trendInterval">-24h</option>
+        <option name="unitPosition">after</option>
+        <option name="useColors">0</option>
+        <option name="useThousandSeparators">1</option>
       </single>
     </panel>
   </row>
