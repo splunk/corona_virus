@@ -1,0 +1,302 @@
+<dashboard>
+  <label>NYC Dashboard</label>
+  <row>
+    <panel>
+      <title>Total Cases - New York City</title>
+      <single>
+        <search>
+          <query>| inputlookup nyc_confirmed.csv WHERE Group=Total | transpose column_name=_time header_field=Count
+| rename "row 1" as Count
+| stats max(Count)</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Total Deaths - New York City</title>
+      <single>
+        <search>
+          <query>| inputlookup nyc_confirmed.csv
+    WHERE Group="Deaths"
+| fields - Subgroup 
+| transpose column_name=_time 
+| rename "row 1" as Deaths 
+| search _time!=Group
+| sort 0 - Deaths
+| head 1
+| fields Deaths</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Cases by Borough</title>
+      <table>
+        <search>
+          <query>| inputlookup nyc_deaths.csv
+    WHERE Group="Borough" 
+| fields - Group 
+| transpose 0 column_name=_time header_field=Subgroup 
+| sort 0 - _time 
+| head 1 
+| transpose 
+| search column!="_time" 
+| rename "row 1" as Deaths 
+| rename column as Borough
+
+| join 
+    [| inputlookup nyc_confirmed.csv
+        WHERE Group="Borough" 
+    | fields - Group 
+    | transpose 0 column_name=_time header_field=Subgroup 
+    | sort 0 - _time 
+    | head 1 
+    | transpose 
+    | search column!="_time" 
+    | rename "row 1" as Confirmed
+    | rename column as Borough]</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Bronx</title>
+      <chart>
+        <search>
+          <query>| inputlookup nyc_deaths.csv
+    WHERE Group="Borough" Subgroup="Bronx" 
+| fields - Subgroup 
+| transpose column_name=_time 
+| rename "row 1" as Count 
+| search _time!=Group 
+| eval status="Deaths" 
+| append 
+    [| inputlookup nyc_confirmed.csv
+        WHERE Group="Borough" Subgroup="Bronx" 
+    | fields - Subgroup 
+    | transpose column_name=_time 
+    | rename "row 1" as Count 
+    | search _time!=Group 
+    | eval status="Confirmed"
+        ] 
+| xyseries _time status Count
+| filldown Confirmed Deaths
+| fillnull value=0
+| eval time=strptime(_time,"%Y-%m-%d %H:%M:%S%z")
+| eval _time=strftime(time,"%Y-%m-%d")
+| sort 0 - _time | dedup _time
+| fields - time
+|  fields _time Deaths Confirmed</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Brooklyn</title>
+      <chart>
+        <search>
+          <query>| inputlookup nyc_deaths.csv
+    WHERE Group="Borough" Subgroup="Brooklyn" 
+| fields - Subgroup 
+| transpose column_name=_time 
+| rename "row 1" as Count 
+| search _time!=Group 
+| eval status="Deaths" 
+| append 
+    [| inputlookup nyc_confirmed.csv
+        WHERE Group="Borough" Subgroup="Brooklyn" 
+    | fields - Subgroup 
+    | transpose column_name=_time 
+    | rename "row 1" as Count 
+    | search _time!=Group 
+    | eval status="Confirmed"
+        ] 
+| xyseries _time status Count
+| filldown Confirmed Deaths
+| fillnull value=0
+| eval time=strptime(_time,"%Y-%m-%d %H:%M:%S%z")
+| eval _time=strftime(time,"%Y-%m-%d")
+| sort 0 - _time | dedup _time
+| fields - time
+|  fields _time Deaths Confirmed</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Manhattan</title>
+      <chart>
+        <search>
+          <query>| inputlookup nyc_deaths.csv
+    WHERE Group="Borough" Subgroup="Manhattan" 
+| fields - Subgroup 
+| transpose column_name=_time 
+| rename "row 1" as Count 
+| search _time!=Group 
+| eval status="Deaths" 
+| append 
+    [| inputlookup nyc_confirmed.csv
+        WHERE Group="Borough" Subgroup="Manhattan" 
+    | fields - Subgroup 
+    | transpose column_name=_time 
+    | rename "row 1" as Count 
+    | search _time!=Group 
+    | eval status="Confirmed"
+        ] 
+| xyseries _time status Count
+| filldown Confirmed Deaths
+| fillnull value=0
+| eval time=strptime(_time,"%Y-%m-%d %H:%M:%S%z")
+| eval _time=strftime(time,"%Y-%m-%d")
+| sort 0 - _time | dedup _time
+| fields - time
+|  fields _time Deaths Confirmed</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Queens</title>
+      <chart>
+        <search>
+          <query>| inputlookup nyc_deaths.csv
+    WHERE Group="Borough" Subgroup="Queens" 
+| fields - Subgroup 
+| transpose column_name=_time 
+| rename "row 1" as Count 
+| search _time!=Group 
+| eval status="Deaths" 
+| append 
+    [| inputlookup nyc_confirmed.csv
+        WHERE Group="Borough" Subgroup="Queens" 
+    | fields - Subgroup 
+    | transpose column_name=_time 
+    | rename "row 1" as Count 
+    | search _time!=Group 
+    | eval status="Confirmed"
+        ] 
+| xyseries _time status Count
+| filldown Confirmed Deaths
+| fillnull value=0
+| eval time=strptime(_time,"%Y-%m-%d %H:%M:%S%z")
+| eval _time=strftime(time,"%Y-%m-%d")
+| sort 0 - _time | dedup _time
+| fields - time
+|  fields _time Deaths Confirmed</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Staten Island</title>
+      <chart>
+        <search>
+          <query>| inputlookup nyc_deaths.csv
+    WHERE Group="Borough" Subgroup="Staten Island" 
+| fields - Subgroup 
+| transpose column_name=_time 
+| rename "row 1" as Count 
+| search _time!=Group 
+| eval status="Deaths" 
+| append 
+    [| inputlookup nyc_confirmed.csv
+        WHERE Group="Borough" Subgroup="Staten Island" 
+    | fields - Subgroup 
+    | transpose column_name=_time 
+    | rename "row 1" as Count 
+    | search _time!=Group 
+    | eval status="Confirmed"
+        ] 
+| xyseries _time status Count
+| filldown Confirmed Deaths
+| fillnull value=0
+| eval time=strptime(_time,"%Y-%m-%d %H:%M:%S%z")
+| eval _time=strftime(time,"%Y-%m-%d")
+| sort 0 - _time | dedup _time
+| fields - time
+|  fields _time Deaths Confirmed</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>New York City - Confirmed Case Growth Rate</title>
+        <search>
+          <query>| inputlookup nyc_confirmed.csv
+    WHERE Group="Total"
+| fields - Subgroup 
+| transpose column_name=_time 
+| rename "row 1" as Confirmed 
+| search _time!=Group
+| streamstats last(Confirmed) as last_confirmed current=f
+| eval growth_rate=round((((Confirmed-last_confirmed)/Confirmed)*100),2)
+| fields - last_confirmed
+| rename growth_rate as "Growth Rate"</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Total Cases (linear scale)</option>
+        <option name="charting.axisTitleY2.text">Growth Rate</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisY2.enabled">1</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.overlayFields">"Growth Rate"</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+</dashboard>
