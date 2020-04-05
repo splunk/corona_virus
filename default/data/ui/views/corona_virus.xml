@@ -130,77 +130,12 @@
     <panel>
       <title>Cases by Country</title>
       <map>
-        <search base="base">
-          <query> | fields * |  fields - "Province/State" 
-| rename "Country/Region" as Country 
-| search $country$
-| eval Country=Country+","+Lat+","+Long 
-| stats sum(*) as * by Country 
-| dedup Country 
-| transpose 0 column_name=_time header_field=Country 
-| eval _time=strptime(_time,"%m/%d/%y") 
-| sort 0 - _time 
-| head 1 
-| fields - _time 
-| transpose 
-| rename column as "Country", "row 1" as "Confirmed" 
-| sort 0 - Total 
-| eval fields=split(Country,",") 
-| eval Lat=mvindex(fields,1) 
-| eval Long=mvindex(fields,2) 
-| eval Country=mvindex(fields,0) 
-| fields - fields 
-| sort 0 + Country Lat Long 
-| appendcols 
-    [| inputlookup deaths.csv 
-    | fields - "Province/State" 
-    | rename "Country/Region" as Country 
-    | search $country$
+        <search base="jhu_filtered">
+          <query>| eventstats max(_time) as max_time 
+| where _time=max_time
 
-    | eval Country=Country+","+Lat+","+Long 
-    | stats sum(*) as * by Country 
-    | dedup Country 
-    | transpose 0 column_name=_time header_field=Country 
-    | eval _time=strptime(_time,"%m/%d/%y") 
-    | sort 0 - _time 
-    | head 1 
-    | fields - _time 
-    | transpose 
-    | rename column as "Country", "row 1" as "Deaths" 
-    | sort 0 - Deaths 
-    | eval fields=split(Country,",") 
-    | eval Lat=mvindex(fields,1) 
-    | eval Long=mvindex(fields,2) 
-    | eval Country=mvindex(fields,0) 
-    | fields - fields 
-    | sort 0 + Country Lat Long] 
-| appendcols 
-    [| inputlookup recovered.csv 
-    | fields - "Province/State" 
-    | rename "Country/Region" as Country 
-    | search $country$
-
-    | eval Country=Country+","+Lat+","+Long 
-    | stats sum(*) as * by Country 
-    | dedup Country 
-    | transpose 0 column_name=_time header_field=Country 
-    | eval _time=strptime(_time,"%m/%d/%y") 
-    | sort 0 - _time 
-    | head 1 
-    | fields - _time 
-    | transpose 
-    | rename column as "Country", "row 1" as "Recovered" 
-    | sort 0 - Recovered 
-    | eval fields=split(Country,",") 
-    | eval Lat=mvindex(fields,1) 
-    | eval Long=mvindex(fields,2) 
-    | eval Country=mvindex(fields,0) 
-    | fields - fields 
-    | sort 0 + Country Lat Long]
-    | geostats latfield=Lat longfield=Long  sum(Confirmed) sum(Recovered) sum(Deaths)  by Country globallimit=0
-| rename "sum(*" as *
-| rename *)* as **</query>
-          <sampleRatio>1</sampleRatio>
+| eval Location=if(len(Province)&gt;0, Country + " - " + Province, Country)
+| geostats latfield=Lat longfield=Long globallimit=0 sum(Confirmed) as Confirmed sum(Recovered) as Recovered sum(Deaths) as Deaths by Location</query>
         </search>
         <option name="drilldown">none</option>
         <option name="mapping.choroplethLayer.colorBins">5</option>
@@ -214,7 +149,7 @@
         <option name="mapping.legend.placement">bottomright</option>
         <option name="mapping.map.center">(0,0)</option>
         <option name="mapping.map.panning">1</option>
-        <option name="mapping.map.scrollZoom">0</option>
+        <option name="mapping.map.scrollZoom">1</option>
         <option name="mapping.map.zoom">2</option>
         <option name="mapping.markerLayer.markerMaxSize">50</option>
         <option name="mapping.markerLayer.markerMinSize">10</option>
@@ -224,7 +159,6 @@
         <option name="mapping.tileLayer.minZoom">0</option>
         <option name="mapping.tileLayer.tileOpacity">1</option>
         <option name="mapping.type">marker</option>
-        <option name="refresh.display">progressbar</option>
         <option name="trellis.enabled">0</option>
         <option name="trellis.scales.shared">1</option>
         <option name="trellis.size">medium</option>
