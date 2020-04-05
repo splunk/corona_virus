@@ -51,7 +51,7 @@
 			"dataSources": {
 				"primary": "ds_DR7r9VJQ"
 			},
-			"title": "Confirmed Cases by Country (Since January 22, 2020)"
+			"title": "Total Cases by Country"
 		},
 		"viz_FJEV8EEa": {
 			"type": "viz.singlevalue",
@@ -114,7 +114,7 @@
 			}
 		},
 		"viz_1DbnnCNQ": {
-			"type": "viz.area",
+			"type": "viz.column",
 			"options": {
 				"chart.stackMode": "stacked",
 				"backgroundColor": "#ffffff",
@@ -241,15 +241,15 @@
 			},
 			"options": {
 				"backgroundColor": "#ffffff",
-				"axisY.scale": "log",
+				"axisY.scale": "linear",
 				"seriesColors": "[#A870EF,#A9F5E7, #45D4BA,#1E6271,#602CA1,#9AE6F7,#2F8AA7,#422879,#F29BAC,#E85B79,#C6335F,#FDAF93,#FB865C,#E9643A,#7EEFDA,#26AA92,#207865,#C093F9,#8847DA,#4EB2D2,#912344]",
 				"axisTitleX.text": "Days",
-				"axisTitleY.text": "Number (log scale)"
+				"axisTitleY.text": "Number (linear scale)"
 			},
 			"dataSources": {
 				"primary": "ds_DS4CmivD"
 			},
-			"title": "Confirmed Cases by Country over Time"
+			"title": "Top 25 Countries with Confirmed Cases (By Day Since January 01, 2020)"
 		},
 		"viz_QqYMgs26": {
 			"type": "viz.rectangle",
@@ -560,7 +560,8 @@
 		"ds_Uxpiy3fW": {
 			"type": "ds.search",
 			"options": {
-				"query": "| inputlookup confirmed.csv \n| fields * \n| fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| stats sum(*) as * by Country \n| dedup Country\n| addtotals\n| sort 0 - Total\n| head 25\n| fields - Total\n| transpose 0 column_name=_time header_field=Country",
+				"query": "| inputlookup confirmed.csv \n| fields * \n| fields - Lat Long \"Province/State\" \n| rename \"Country/Region\" as Country \n| search Country!=\"Diamond*\" AND Country!=\"*Princess*\" \n| stats sum(*) as * by Country \n| dedup Country \n\n| transpose 0 column_name=_time header_field=Country \n| eval time=strptime(_time,\"%m/%d/%y\") \n| eval _time=strftime(time,\"%Y-%m-%dT%H:%M:%S.%Q\") \n| fields - time \n| untable _time Country count\n| eventstats max(count) as max by Country\n| sort 0 - max\n| streamstats dc(max)  as rank current=t\n| where rank<25\n| replace \"Korea, South\" with \"SouthKorea\" in Country \n| replace \"United Kingdom\" with \"UK\" in Country \n| search Country!=\"Diamond*\" AND Country!=\"*Princess*\"\n| fields - max rank\n| xyseries _time Country count\n| fillnull value=0",
+
 				"queryParameters": {
 					"earliest": "0",
 					"latest": "now"
