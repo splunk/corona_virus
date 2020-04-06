@@ -31,7 +31,7 @@ This will ensure the required submodule is cloned into the correct directory ins
 ## Dashboard Information
 
 1. Coronavirus 
-    ![image](https://user-images.githubusercontent.com/11879871/77706120-dd31e180-6f97-11ea-96e0-89d1a2182896.png)
+    ![image](https://user-images.githubusercontent.com/9200239/78514519-16492d80-77b2-11ea-8bff-4cb83f2ae312.png)
     1. This is a static analysis of the Coronavirus. 
 1. covid-19 Patterns & Trends
     ![image](https://user-images.githubusercontent.com/11879871/77706906-08b5cb80-6f9a-11ea-9b3b-0517f99389bb.png)
@@ -115,7 +115,9 @@ This script does require pandas, which does not ship with Splunk today. But you 
 ### 04/04/20
 * Updated combined_jhu.csv
 * Resolved issue with table on main app. Ended up cutting over to using my combined_jhu.csv which is a much easier format to work with. 
-* resolved issue #16
+* Resolved issue #16
+* Added report "Datapreperation JHU Lookups"
+* Reworked Dashboard "Coronavirus"
 
 ### 04/03/20
 * Updated combined_jhu.csv
