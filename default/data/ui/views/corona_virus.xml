@@ -11,13 +11,6 @@
   <search id="jhu_filtered" base="jhu">
     <query>| search $country$</query>
   </search>
-  <search id="base">
-    <query>|inputlookup confirmed.csv | fields *</query>
-    <earliest>-24h@h</earliest>
-    <latest>now</latest>
-    <refresh>10m</refresh>
-    <refreshType>delay</refreshType>
-  </search>
   <description>This data is sourced from https://github.com/CSSEGISandData/COVID-19. Expect updates to the data about once per day.</description>
   <fieldset submitButton="false">
     <input type="multiselect" token="country">
@@ -246,51 +239,60 @@
   </row>
   <row>
     <panel>
-      <title>Top 25 Countries with Confirmed Cases (By Day Since January 01, 2020)</title>
+      <title>Top $limit_1$ Countries with $metric_2_name$ (By Day Since January 01, 2020)</title>
+      <input type="dropdown" token="limit_1">
+        <label>Limit to Top</label>
+        <choice value="5">5</choice>
+        <choice value="10">10</choice>
+        <choice value="15">15</choice>
+        <choice value="20">20</choice>
+        <choice value="25">25</choice>
+        <default>10</default>
+        <initialValue>10</initialValue>
+      </input>
+      <input type="dropdown" token="metric_2">
+        <label>Metric</label>
+        <choice value="Confirmed">Total Confirmed Cases</choice>
+        <choice value="Active">Active Infections</choice>
+        <choice value="Deaths">Deaths</choice>
+        <choice value="Recovered">Recovered</choice>
+        <default>Confirmed</default>
+        <initialValue>Confirmed</initialValue>
+        <change>
+          <set token="metric_2_name">$label$</set>
+        </change>
+      </input>
+      <input type="radio" token="groth">
+        <label>Bubble Size</label>
+        <choice value="Growth Rate (%)">Growth Rate (%)</choice>
+        <choice value="Absolute Growth">Absolute Growth</choice>
+        <default>Growth Rate (%)</default>
+        <initialValue>Growth Rate (%)</initialValue>
+      </input>
       <chart>
-        <search base="base">
-          <query>| fields - Lat Long "Province/State" 
-| rename "Country/Region" as Country 
-| stats sum(*) as * by Country 
-| dedup Country 
-| search $country$
-| untable Country _time count
-| eval time=case(_time="Confirmed", strftime(now(),"%m/%d/%y"), 1=1, strftime(strptime(_time,"%m/%d/%y"),"%m/%d/%y")) 
-| eval _time=strptime(time,"%m/%d/%y") 
-| eval starttime="01012020" 
-| eval time2=strptime(starttime,"%m%d%Y") 
-| eval days=floor(((_time+86400)-time2)/86400) 
-| table days count Country 
-| join Country days 
-    [| inputlookup deaths.csv 
-    | fields - Lat Long "Province/State" 
-    | rename "Country/Region" as Country 
-    | stats sum(*) as * by Country 
-    | dedup Country 
-| search $country$
-    | untable Country _time count 
-    | eval _time=strptime(_time,"%m/%d/%y") 
-    | eval starttime="01012020" 
-    | eval time2=strptime(starttime,"%m%d%Y") 
-    | eval days=floor(((_time+86400)-time2)/86400) 
-    | table Country _time days count 
-    | rename count as death_count
-        ] 
-| fields Country days count death_count
-| eventstats max(count) as max by Country
-| sort 0 - max
-| streamstats dc(max)  as rank current=t
-| where rank&lt;25
-| fields Country days count death_count
-| sort 0 + Country days</query>
-          <refresh>10m</refresh>
-          <refreshType>delay</refreshType>
+        <title>Bubble size represents $groth$ of the $metric_2_name$ compared to previous day</title>
+        <search base="jhu_filtered">
+          <query>| eval "Day since 1st January 2020" = floor((_time - strptime("01/01/2020","%m/%d/%y"))/86400)
+| stats sum($metric_2$) as $metric_2$ by "Day since 1st January 2020" Country
+
+| eventstats max($metric_2$) as max by Country
+| sort 0 - max + Country "Day since 1st January 2020"
+| streamstats dc(Country) as rank current=t
+| where rank&lt;=$limit_1$
+
+| eval previousDay=0
+| streamstats current=f reset_on_change=true last($metric_2$) as previousDay BY Country
+
+| eval "Absolute Growth"=$metric_2$-previousDay
+| eval "Growth Rate (%)"=round(100/previousDay*'Absolute Growth', 2)
+| fillnull value=0 "Growth Rate (%)"
+
+| table Country "Day since 1st January 2020" $metric_2$ "$groth$"
+| rename Confirmed as "Total Confirmed Cases" Active as "Active Infections"</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-        <option name="charting.axisTitleX.text">Days since January 01, 2020</option>
         <option name="charting.axisTitleX.visibility">visible</option>
-        <option name="charting.axisTitleY.text">Confirmed Cases</option>
         <option name="charting.axisTitleY.visibility">visible</option>
         <option name="charting.axisTitleY2.visibility">visible</option>
         <option name="charting.axisX.abbreviation">none</option>
@@ -327,47 +329,19 @@
     <panel>
       <title>Total Confirmed Cases (With Overall Infection Rate Calculated Each Day)</title>
       <chart>
-        <search base="base">
-          <query>| fields - Lat Long "Province/State" 
-| rename "Country/Region" as Country 
-| stats sum(*) as * by Country 
-| dedup Country 
-| search $country$
-| transpose 0 column_name=_time header_field=Country 
-| eval _time=strptime(_time,"%m/%d/%y") 
-| sort 0 + _time 
-| eval starttime="01012020" 
-| eval time2=strptime(starttime,"%m%d%Y") 
-| eval days=floor((_time-time2)/86400) 
-| fields days * 
-| fields - days starttime time2 *username* 
-| fields _time * 
-| addtotals 
-| fields _time Total 
-| eval num=1 
-| streamstats sum(num) as num 
-| eventstats max(Total) as max min(Total) as min max(num) as max_points 
-| eval trend=max/max_points 
-| fields - min max max_points 
-| sort 0 + Total 
-| streamstats sum(trend) as "Average Cases (All-Time)" 
-| fields - trend 
-| rename "Total" as "Total Cases" 
+        <search base="jhu_filtered">
+          <query>| timechart span=1d sum(Confirmed) as "Total Cases"
+
+| eval num=1
+| streamstats sum(num) as num
 | eval "Overall Infection Rate"=round('Total Cases'/num,2)
-| fields - num "Average Cases (All-Time)"
-| eventstats max("Overall Infection Rate") as "Maximum Infection Rate"
-| rename "Total Cases" as "TotalCases"
-| streamstats current=f window=2 last(TotalCases) as last
-| rename TotalCases as "Total Cases"
-| fields - last
-| eval time=_time
-| eval _time=strftime(time,"%Y-%m-%dT%H:%M:%S.%Q")
-| fields - time</query>
-          <refresh>10m</refresh>
-          <refreshType>delay</refreshType>
+| fields - num
+
+| eventstats max("Overall Infection Rate") as "Maximum Infection Rate"</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.text">Date</option>
         <option name="charting.axisTitleX.visibility">visible</option>
         <option name="charting.axisTitleY.visibility">visible</option>
         <option name="charting.axisTitleY2.visibility">visible</option>
@@ -404,38 +378,16 @@
     <panel>
       <title>Daily Infection Rate</title>
       <chart>
-        <search base="base">
-          <query>| fields - Lat Long "Province/State" 
-| rename "Country/Region" as Country 
-| stats sum(*) as * by Country 
-| dedup Country 
-| search $country$
-| transpose 0 column_name=_time header_field=Country 
-| eval _time=strptime(_time,"%m/%d/%y") 
-| sort 0 + _time 
-| eval starttime="01012020" 
-| eval time2=strptime(starttime,"%m%d%Y") 
-| eval days=floor((_time-time2)/86400) 
-| fields days * 
-| fields - days starttime time2 *username* 
-| fields _time * 
-| addtotals 
-| fields _time Total 
-| rename "Total" as "Total Cases" 
-| rename "Total Cases" as "TotalCases" 
-| streamstats current=f window=2 last(TotalCases) as last 
-| eval perc_incr=round(((TotalCases-last)/last)*100, 2)
-| rename TotalCases as "Total Cases", perc_incr as "Daily Infection Rate" 
-| fields - last 
-| fields _time "Total Cases"  "Daily Infection Rate"
-| eval time=_time
-| eval _time=strftime(time,"%Y-%m-%dT%H:%M:%S.%Q")
-| fields - time</query>
-          <refresh>10m</refresh>
-          <refreshType>delay</refreshType>
+        <search base="jhu_filtered">
+          <query>| timechart span=1d sum(Confirmed) as "Total Cases"
+
+| streamstats current=f last("Total Cases") as previousDay
+| eval "Daily Infection Rate"=round((('Total Cases'-previousDay)/previousDay)*100, 2)
+| fields - previousDay</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.text">Date</option>
         <option name="charting.axisTitleX.visibility">visible</option>
         <option name="charting.axisTitleY.visibility">visible</option>
         <option name="charting.axisTitleY2.visibility">visible</option>
@@ -451,7 +403,7 @@
         <option name="charting.chart.bubbleMinimumSize">10</option>
         <option name="charting.chart.bubbleSizeBy">area</option>
         <option name="charting.chart.nullValueMode">gaps</option>
-        <option name="charting.chart.overlayFields">"Total Cases"</option>
+        <option name="charting.chart.overlayFields">"Daily Infection Rate"</option>
         <option name="charting.chart.showDataLabels">none</option>
         <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
         <option name="charting.chart.stackMode">default</option>
