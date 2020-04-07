@@ -272,7 +272,7 @@
     <panel>
       <title>Corona Virus Cases</title>
       <map>
-        <search base="base">
+        <search base="combined_base">
           <query>
 | fields - "Province/State" 
 | rename "Country/Region" as Country 
@@ -391,21 +391,17 @@
       <title>Total Cases by Country</title>
       <table>
         <search base="combined_base">
-          <query> 
-| eval time=strptime(_time,"%m-%d-%y") 
-| eval time=strftime(time,"%m-%d-%Y %H:%M:%S") 
-| fields - FIPS Longitude Latitude latest_t 
-| stats sum(*) as * by Country time 
-| streamstats window=2 current=f last(Confirmed) as last_confirmed by Country 
-| eval perc_incr=round(((Confirmed-last_confirmed)/last_confirmed)*100,2)."%" 
-| fields - last_confirmed 
-| rename "perc_incr" as "Daily Infection Rate" 
-| search "Daily Infection Rate"=* 
-| eval _time=strptime(time,"%m-%d-%Y %H:%M:%S") 
+          <query>| stats sum(Confirmed) as Confirmed sum(Deaths) as Deaths sum(Recovered) as Recovered by Country _time 
+| sort 0 + Country _time 
+| streamstats last(Confirmed) as last_Confirmed window=2 current=f by Country 
+| eval GrowthRate=round(((Confirmed-last_Confirmed)/last_Confirmed)*100,2) 
+| fields - last_Confirmed 
+| sort 0 - _time Confirmed Country 
 | eval time=_time 
+| eval time=strptime(time,"%m-%d-%Y") 
 | eval starttime="01012020" 
 | eval time2=strptime(starttime,"%m%d%Y") 
-| eval days=floor((_time-time2)/86400) 
+| eval days=floor((time-time2)/86400)
 | appendcols 
     [| rest /services/authentication/current-context 
     | table username] 
@@ -414,9 +410,12 @@
     [| inputlookup user_timer 
     | rename inc as days 
     | table days username] 
-| fields Country Confirmed Deaths Recovered "Daily Infection Rate"
-| fields - _time
-| sort 0 - Confirmed</query>
+    | fields Country Confirmed Deaths Recovered GrowthRate
+| fields - _time 
+| sort 0 - Confirmed 
+| rename GrowthRate as "% Growth Rate"</query>
+          <refresh>1s</refresh>
+          <refreshType>delay</refreshType>
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>
