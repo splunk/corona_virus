@@ -102,7 +102,7 @@ def do_run():
         if proxies:
             req_args["proxies"] = proxies
 
-        req = requests.get(url="https://publicdashacc.blob.core.windows.net/publicdata?restype=container&comp=list&prefix=data_202004141544", params=req_args)
+        req = requests.get(url="https://publicdashacc.blob.core.windows.net/publicdata?restype=container&comp=list&prefix=data", params=req_args)
         xmldom = etree.fromstring(req.content)
 
         blobs = xmldom.xpath('/EnumerationResults/Blobs/Blob')
