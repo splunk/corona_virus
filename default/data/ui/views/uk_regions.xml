@@ -4,7 +4,7 @@
     <panel>
       <map>
         <search>
-          <query>index=main type=regions |stats latest(dailyTotalConfirmedCases) AS dailyTotalConfirmedCases by region | geom ukregions featureIdField=region</query>
+          <query>index=main sourcetype=covidgovuk type=regions |stats latest(dailyTotalConfirmedCases) AS dailyTotalConfirmedCases by region | geom ukregions featureIdField=region</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -39,7 +39,7 @@
     <panel>
       <table>
         <search>
-          <query>index=main type=regions |stats latest(dailyTotalConfirmedCases) AS dailyTotalConfirmedCases by region | lookup ukregions.csv region | fields -  region |rename name AS "Region" | table Region *</query>
+          <query>index=main sourcetype=covidgovuk type=regions |stats latest(dailyTotalConfirmedCases) AS dailyTotalConfirmedCases by region | lookup ukregions.csv region | fields -  region |rename name AS "Region" | table Region *</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
         </search>

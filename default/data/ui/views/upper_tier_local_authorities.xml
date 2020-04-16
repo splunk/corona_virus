@@ -4,7 +4,7 @@
     <panel>
       <map>
         <search>
-          <query>index=main source="data_202004141544.json" type=utlas |stats latest(dailyTotalConfirmedCases) AS dailyTotalConfirmedCases by region|geom utlas featureIdField=region</query>
+          <query>index=main sourcetype=covidgovuk type=utlas |stats latest(dailyTotalConfirmedCases) AS dailyTotalConfirmedCases by region|geom utlas featureIdField=region</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
