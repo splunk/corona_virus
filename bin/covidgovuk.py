@@ -71,7 +71,7 @@ def iterate_json_data(block, data_json, blob_name):
                 for dailydate in detail_data:
                     #print("DailyDate={}".format(dailydate))
                     splunk_row[detail] = dailydate['value']
-                    splunk_row['date'] = dailydate['date']
+                    splunk_row['date'] = dailydate['date'] + " 01:00:00.000"
                     pprint(splunk_row)
                     print_xml_stream(json.dumps(splunk_row,ensure_ascii=False),blob_name)
                     del splunk_row[detail]
