@@ -1,0 +1,301 @@
+name,region
+Essex,E10000012
+Gloucestershire,E10000013
+"Milton Keynes",E06000042
+"Brighton and Hove",E06000043
+Kent,E10000016
+Lancashire,E10000017
+"Isle of Wight",E06000046
+Hertfordshire,E10000015
+"Stockton-on-Tees",E06000004
+"Cheshire East",E06000049
+Leicestershire,E10000018
+Lincolnshire,E10000019
+Hartlepool,E06000001
+Middlesbrough,E06000002
+"Redcar and Cleveland",E06000003
+"Blackburn with Darwen",E06000008
+Solihull,E08000029
+"Richmond upon Thames",E09000027
+Southwark,E09000028
+"East Sussex",E10000011
+Newham,E09000025
+Merton,E09000024
+"North Tyneside",E08000022
+Redbridge,E09000026
+"Kingston upon Thames",E09000021
+"Kensington and Chelsea",E09000020
+Coventry,E08000026
+Lambeth,E09000022
+Blackpool,E06000009
+Birmingham,E08000025
+Hampshire,E10000014
+Hounslow,E09000018
+"County Durham",E06000047
+Medway,E06000035
+Thurrock,E06000034
+Islington,E09000019
+"Bracknell Forest",E06000036
+Peterborough,E06000031
+Swindon,E06000030
+"Southend-on-Sea",E06000033
+Luton,E06000032
+"Tower Hamlets",E09000030
+Darlington,E06000005
+Slough,E06000039
+Reading,E06000038
+"Waltham Forest",E09000031
+Knowsley,E08000011
+Wigan,E08000010
+"St. Helens",E08000013
+Liverpool,E08000012
+Wirral,E08000015
+Sefton,E08000014
+Doncaster,E08000017
+Barnsley,E08000016
+Sheffield,E08000019
+Rotherham,E08000018
+Worcestershire,E10000034
+"Windsor and Maidenhead",E06000040
+Suffolk,E10000029
+Staffordshire,E10000028
+Somerset,E10000027
+Oxfordshire,E10000025
+Nottinghamshire,E10000024
+"North Yorkshire",E10000023
+Westminster,E09000033
+Northamptonshire,E10000021
+Norfolk,E10000020
+"West Sussex",E10000032
+Sandwell,E08000028
+Wokingham,E06000041
+Plymouth,E06000026
+Torbay,E06000027
+"North Somerset",E06000024
+"South Gloucestershire",E06000025
+"Bath and North East Somerset",E06000022
+"Bristol, City of",E06000023
+"Telford and Wrekin",E06000020
+"Stoke-on-Trent",E06000021
+Sutton,E09000029
+Bury,E08000002
+Manchester,E08000003
+Bolton,E08000001
+Salford,E08000006
+Stockport,E08000007
+Oldham,E08000004
+Rochdale,E08000005
+Tameside,E08000008
+Trafford,E08000009
+Cambridgeshire,E10000003
+Ealing,E09000009
+Croydon,E09000008
+Surrey,E10000030
+Wiltshire,E06000054
+Barnet,E09000003
+"Barking and Dagenham",E09000002
+"Newcastle upon Tyne",E08000021
+Camden,E09000007
+Bromley,E09000006
+Brent,E09000005
+Bexley,E09000004
+"City of London",E09000001
+"South Tyneside",E08000023
+Shropshire,E06000051
+Sunderland,E08000024
+"West Berkshire",E06000037
+Cumbria,E10000006
+"North Lincolnshire",E06000013
+"North East Lincolnshire",E06000012
+"East Riding of Yorkshire",E06000011
+"Kingston upon Hull, City of",E06000010
+Rutland,E06000017
+Leicester,E06000016
+Derby,E06000015
+York,E06000014
+Lewisham,E09000023
+"Herefordshire, County of",E06000019
+Nottingham,E06000018
+Dudley,E08000027
+Northumberland,E06000057
+"Central Bedfordshire",E06000056
+Bedford,E06000055
+Buckinghamshire,E10000002
+Halton,E06000006
+"Cornwall and Isles of Scilly",E06000052
+Derbyshire,E10000007
+"Cheshire West and Chester",E06000050
+Portsmouth,E06000044
+Devon,E10000008
+Wandsworth,E09000032
+Dorset,E06000059
+"Bournemouth, Christchurch and Poole",E06000058
+Haringey,E09000014
+Harrow,E09000015
+Havering,E09000016
+Hillingdon,E09000017
+Enfield,E09000010
+Greenwich,E09000011
+Hackney,E09000012
+"Hammersmith and Fulham",E09000013
+Gateshead,E08000037
+Wakefield,E08000036
+Leeds,E08000035
+Kirklees,E08000034
+Calderdale,E08000033
+Bradford,E08000032
+Wolverhampton,E08000031
+Walsall,E08000030
+Warrington,E06000007
+Southampton,E06000045
+Warwickshire,E10000031
+Devon,E10000008
+Dorset,E06000059
+"Bournemouth, Christchurch and Poole",E06000058
+Suffolk,E10000029
+Cambridgeshire,E10000003
+Buckinghamshire,E10000002
+Northumberland,E06000057
+"Central Bedfordshire",E06000056
+Derbyshire,E10000007
+Cumbria,E10000006
+"Windsor and Maidenhead",E06000040
+"Cornwall and Isles of Scilly",E06000052
+"Herefordshire, County of",E06000019
+Nottingham,E06000018
+"North Somerset",E06000024
+Sunderland,E08000024
+"East Riding of Yorkshire",E06000011
+"Kingston upon Hull, City of",E06000010
+"North Lincolnshire",E06000013
+"North East Lincolnshire",E06000012
+Derby,E06000015
+York,E06000014
+Rutland,E06000017
+Leicester,E06000016
+"North Tyneside",E08000022
+Staffordshire,E10000028
+"Richmond upon Thames",E09000027
+Redbridge,E09000026
+Newham,E09000025
+Merton,E09000024
+Lewisham,E09000023
+Lambeth,E09000022
+"Kingston upon Thames",E09000021
+"Kensington and Chelsea",E09000020
+Wiltshire,E06000054
+Coventry,E08000026
+Sutton,E09000029
+Southwark,E09000028
+Halton,E06000006
+Lincolnshire,E10000019
+Bexley,E09000004
+Darlington,E06000005
+Middlesbrough,E06000002
+"Redcar and Cleveland",E06000003
+Wigan,E08000010
+Hartlepool,E06000001
+"Milton Keynes",E06000042
+"Brighton and Hove",E06000043
+Essex,E10000012
+Gloucestershire,E10000013
+"Isle of Wight",E06000046
+"County Durham",E06000047
+"Blackburn with Darwen",E06000008
+Lancashire,E10000017
+"Cheshire West and Chester",E06000050
+"West Sussex",E10000032
+Blackpool,E06000009
+Sandwell,E08000028
+"South Gloucestershire",E06000025
+Birmingham,E08000025
+Surrey,E10000030
+"Barking and Dagenham",E09000002
+Leeds,E08000035
+Kirklees,E08000034
+Gateshead,E08000037
+Wakefield,E08000036
+"Tower Hamlets",E09000030
+Walsall,E08000030
+Calderdale,E08000033
+Bradford,E08000032
+Bedford,E06000055
+Sheffield,E08000019
+Rotherham,E08000018
+Leicestershire,E10000018
+Warrington,E06000007
+Portsmouth,E06000044
+Wandsworth,E09000032
+Slough,E06000039
+Liverpool,E08000012
+Knowsley,E08000011
+Warwickshire,E10000031
+Doncaster,E08000017
+Barnsley,E08000016
+Wirral,E08000015
+Sefton,E08000014
+"Stockton-on-Tees",E06000004
+"Cheshire East",E06000049
+Reading,E06000038
+"West Berkshire",E06000037
+"Bracknell Forest",E06000036
+Medway,E06000035
+Thurrock,E06000034
+"Southend-on-Sea",E06000033
+Luton,E06000032
+Peterborough,E06000031
+Swindon,E06000030
+Southampton,E06000045
+Westminster,E09000033
+"City of London",E09000001
+"South Tyneside",E08000023
+Barnet,E09000003
+"Newcastle upon Tyne",E08000021
+Brent,E09000005
+Dudley,E08000027
+Camden,E09000007
+Bromley,E09000006
+Ealing,E09000009
+Croydon,E09000008
+"East Sussex",E10000011
+Solihull,E08000029
+Wolverhampton,E08000031
+Tameside,E08000008
+Trafford,E08000009
+"Waltham Forest",E09000031
+Wokingham,E06000041
+"North Yorkshire",E10000023
+Bolton,E08000001
+Bury,E08000002
+Manchester,E08000003
+Hampshire,E10000014
+Rochdale,E08000005
+Salford,E08000006
+Stockport,E08000007
+Hertfordshire,E10000015
+Kent,E10000016
+Oldham,E08000004
+Plymouth,E06000026
+Torbay,E06000027
+"Telford and Wrekin",E06000020
+"Stoke-on-Trent",E06000021
+"Bath and North East Somerset",E06000022
+"Bristol, City of",E06000023
+Worcestershire,E10000034
+"St. Helens",E08000013
+Shropshire,E06000051
+Oxfordshire,E10000025
+Nottinghamshire,E10000024
+Somerset,E10000027
+Northamptonshire,E10000021
+Norfolk,E10000020
+Hounslow,E09000018
+Islington,E09000019
+Havering,E09000016
+Hillingdon,E09000017
+Haringey,E09000014
+Harrow,E09000015
+Hackney,E09000012
+"Hammersmith and Fulham",E09000013
+Enfield,E09000010
+Greenwich,E09000011
