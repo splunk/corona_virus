@@ -1,8 +1,11 @@
 <nav search_view="search">
   <view name="corona_virus"  default='true'  />
   <view name="covid-19" />
-  <view name="coronavirus_timelapse" />
-  <view name="confirmed_cases_location_overlay" />
+  <collection label="Simple XML Dashboards">
+    <view name="nyc_dashboard" />
+    <view name="coronavirus_timelapse" />
+    <view name="confirmed_cases_location_overlay" />
+  </collection>
   <view name="search"/>
   <view name="dashboards" />
 </nav>
