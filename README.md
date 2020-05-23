@@ -154,3 +154,4 @@ This script does require pandas, which does not ship with Splunk today. But you 
 * Merged in the public Splunk Dashboards Beta into the app. So people downloading this app can look at both Simple XML Dashboards, as well as the new dashboards beta dashboard.
 * Fixed a couple bugs to make the main Simple XML Dashboard Mobile Friendly
 * Turned the scripted input on by default to make setup easier for everyome
+
