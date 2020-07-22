@@ -115,6 +115,9 @@ This script does require pandas, which does not ship with Splunk today. But you 
 ```
 ## Change Record
 
+### 07/22/20
+* Changes are now mostly daily updates to combined_jhu.csv and combined_jhu_us_daily.csv. Any major changes will be documented in the Change Record, but daily updates will not. 
+
 ### 04/04/20
 * Updated combined_jhu.csv
 * Resolved issue with table on main app. Ended up cutting over to using my combined_jhu.csv which is a much easier format to work with. 
