@@ -60,7 +60,9 @@
     [| inputlookup locations.csv 
     | rename lat as latitude, lon as longitude 
     | eval markerType="png" 
-    | eval title=description]</query>
+    | eval title=description] 
+| fillnull value="N/A" circleFillColor layerGroup layerDescription circleFillOpacity circleRadius markerType latitude longitude
+| search circleFillColor!="N/A" layerGroup!="N/A" layerDescription!="N/A" circleFillColor!="N/A" circleFillOpacity!="N/A" circleRadius!="N/A" markerType!="N/A" latitude!="N/A" longitude!="N/A" latitude!=""</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
