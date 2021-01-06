@@ -3,6 +3,7 @@
   <view name="covid-19" />
   <view name="coronavirus_timelapse" />
   <view name="confirmed_cases_location_overlay" />
+  <view name="vaccinations" />
   <view name="search"/>
   <view name="dashboards" />
 </nav>
