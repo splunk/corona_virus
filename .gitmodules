@@ -7,3 +7,6 @@
 [submodule "git/coronavirus-data"]
 	path = git/coronavirus-data
 	url = https://github.com/nychealth/coronavirus-data
+[submodule "git/owid"]
+	path = git/owid
+	url = https://github.com/owid/covid-19-data
